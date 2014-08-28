@@ -9,33 +9,34 @@ module ball(ball_width, rod_width=0, rod_length=0) {
 // rod_length is measured from the center of the ball to the end of
 // the stick.
 module socket(ball_width, rod_width=0, rod_length=0) {
+	socketwth = 1.5*ball_width;
+	socketht = 1.75*ball_width;
+	notchwth = .75*ball_width;
+	extranotchdepth=ball_width/1.9;
+	roundradius=ball_width/2.0*1.1;
+	bodyblocklength = (rod_length == 0)?socketwth*2.0:rod_length;
+	
 	intersection() {
-		translate([0,0,-5]) {
-			difference() {
-				cylinder(r=8,h=15);
-				translate([-4,-9,-1]) {
-					cube([8,18,12]);
-				}
-				translate([0,0,5]) {
-					ball(ball_width+.1);
-				}
+		difference() {
+			union () {
+				cylinder(r=socketwth/2.0, h=socketht, center=true);
+				// put the rod in now and there's no need for any math
+				// to add up the lengths
+				cylinder(r=rod_width/2.0,h=rod_length);
 			}
+			translate([0,0,-50+extranotchdepth]) cube([notchwth,100,100], center=true);
+			ball(ball_width+.1);
 		}
 		// rounded corners
 		union() {
-			translate([-10,0,3]) {
-				rotate([0,90,0]) {
-					cylinder(r=8,h=20);
-				}
+			rotate([0,90,0]) {
+				cylinder(r=roundradius, h=socketwth+.1, center=true);
 			}
-			translate([-8,-8,0]) {
-				cube([16,16,16]);
+			translate([0,0,(bodyblocklength+roundradius)*.95]) {
+				cube([2*socketwth,2*socketwth,2*bodyblocklength], center=true);
 			}
 		}
-	}
-	// math and translate to factor in the size of the socket and meet
-	// the definition of "rod length" in the spec above.
-	translate([0,0,10])	cylinder(r=rod_width/2.0,h=rod_length-10);
+    }
 }
 
 // double-ended ball piece
@@ -60,7 +61,11 @@ module socketball(ball_width1, ball_width2, rod_width, rod_length) {
 $fn=50;
 
 // rotate([0,0,0]) ball(10, 3, 20);
-// rotate([0,180,0]) socket(10, 3, 20);
+//rotate([0,180,0]) socket(10, 3, 20);
+// translate([30,0,0]) socket(5, 3, 20);
+// translate([0,0,0]) socket(10, 3, 20);
+// translate([-50,0,0]) socket(20, 3, 20);
+socket(20,0,0);
 // ball2(10, 5, 3, 30);
-// socket2(10, 5, 3, 30);
-socketball(10, 5, 3, 30);
+//socket2(10, 5, 3, 30);
+//socketball(10, 5, 3, 30);
