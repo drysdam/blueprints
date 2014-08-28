@@ -38,8 +38,29 @@ module socket(ball_width, rod_width=0, rod_length=0) {
 	translate([0,0,10])	cylinder(r=rod_width/2.0,h=rod_length-10);
 }
 
+// double-ended ball piece
+module ball2(ball_width1, ball_width2, rod_width, rod_length) {
+	ball(ball_width1, rod_width, rod_length);
+	translate([0,0,rod_length]) sphere(ball_width2/2.0);
+}
+
+// double-ended socket piece
+module socket2(ball_width1, ball_width2, rod_width, rod_length) {
+	socket(ball_width1, rod_width, rod_length-10);
+	translate([0,0,rod_length]) rotate([180,0,0]) socket(ball_width2);
+}
+
+// socket on first end, ball on the other
+module socketball(ball_width1, ball_width2, rod_width, rod_length) {
+	socket(ball_width1, rod_width, rod_length);
+	translate([0,0,rod_length]) sphere(ball_width2/2.0);
+}
+
 // demo
-// $fn=50;
+$fn=50;
 
 // rotate([0,0,0]) ball(10, 3, 20);
 // rotate([0,180,0]) socket(10, 3, 20);
+// ball2(10, 5, 3, 30);
+// socket2(10, 5, 3, 30);
+socketball(10, 5, 3, 30);
