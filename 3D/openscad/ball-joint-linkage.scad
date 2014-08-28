@@ -1,8 +1,14 @@
-module ball() {
-	sphere(r=5);
+// rod_length is measured from center of the ball to end of the stick.
+module ball(ball_width, rod_width=0, rod_length=0) {
+	sphere(r=ball_width/2.0, center=true);
+ 	cylinder(r=rod_width/2.0,h=rod_length);
 }
 
-module socket() {
+// ball_width is the width of a ball that will fit this socket, so the
+// actual width of the socket is a little larger than that. 
+// rod_length is measured from the center of the ball to the end of
+// the stick.
+module socket(ball_width, rod_width=0, rod_length=0) {
 	intersection() {
 		translate([0,0,-5]) {
 			difference() {
@@ -11,7 +17,7 @@ module socket() {
 					cube([8,18,12]);
 				}
 				translate([0,0,5]) {
-					ball();
+					ball(ball_width+.1);
 				}
 			}
 		}
@@ -27,16 +33,13 @@ module socket() {
 			}
 		}
 	}
+	// math and translate to factor in the size of the socket and meet
+	// the definition of "rod length" in the spec above.
+	translate([0,0,10])	cylinder(r=rod_width/2.0,h=rod_length-10);
 }
 
-$fn=100;
+// demo
+// $fn=50;
 
-// ball();
-// rotate([180,0,0]) {
-// 	cylinder(r=2,h=20);
-// }
-
-socket();
-translate([0,0,7]) {
-	cylinder(r=2,h=20);
-}
+// rotate([0,0,0]) ball(10, 3, 20);
+// rotate([0,180,0]) socket(10, 3, 20);
