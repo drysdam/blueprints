@@ -14,8 +14,8 @@ module socket(ball_width, rod_width=0, rod_length=0) {
 	notchwth = .75*ball_width;
 	extranotchdepth=ball_width/1.9;
 	roundradius=ball_width/2.0*1.1;
-	bodyblocklength = (rod_length == 0)?socketwth*2.0:rod_length;
-	
+	bodyblocklength = (rod_length < socketht)?socketwth*2.0:rod_length;
+	render()
 	intersection() {
 		difference() {
 			union () {
@@ -47,8 +47,8 @@ module ball2(ball_width1, ball_width2, rod_width, rod_length) {
 
 // double-ended socket piece
 module socket2(ball_width1, ball_width2, rod_width, rod_length) {
-	socket(ball_width1, rod_width, rod_length-10);
-	translate([0,0,rod_length]) rotate([180,0,0]) socket(ball_width2);
+	socket(ball_width1, rod_width, rod_length/2.0+.1);
+	translate([0,0,rod_length]) rotate([180,0,0]) socket(ball_width2, rod_width, rod_length/2.0);
 }
 
 // socket on first end, ball on the other
@@ -58,14 +58,15 @@ module socketball(ball_width1, ball_width2, rod_width, rod_length) {
 }
 
 // demo
-$fn=50;
+// $fn=50;
 
 // rotate([0,0,0]) ball(10, 3, 20);
 //rotate([0,180,0]) socket(10, 3, 20);
-// translate([30,0,0]) socket(5, 3, 20);
-// translate([0,0,0]) socket(10, 3, 20);
-// translate([-50,0,0]) socket(20, 3, 20);
-socket(20,0,0);
+// translate([30,0,0]) socket(5, 3, 30);
+// translate([15,0,0]) socket(10, 3, 30);
+// translate([-50,0,0]) socket(20, 3, 30);
+// translate([0,0,0]) cylinder(r=3,h=30);
 // ball2(10, 5, 3, 30);
-//socket2(10, 5, 3, 30);
-//socketball(10, 5, 3, 30);
+// socket2(10, 10, 3, 30);
+// translate([20,0,0]) cylinder(r=3,h=30);
+// socketball(10, 5, 3, 30);
