@@ -12,7 +12,13 @@ module finger(s) {
 }
 
 $fn=20;
+// thumb
+translate([-15,0,-40]) rotate([0,-30,0]) finger(1);
+// index
 translate([0,0,0]) finger(1);
+// middle
 translate([17,0,0]) finger(1.1);
+// ring
 translate([34,0,0]) finger(1);
+// pinky
 translate([48,0,0]) finger(.75);
