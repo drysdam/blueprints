@@ -47,8 +47,8 @@ module arctube(arcradius, degrees, ballend=true) {
 			arcsegment(arcradius, 360-degrees);
 		}
 		if (ballend) {
-			translate([0,arcradius,0]) sphere(5);
-			rotate([degrees,0,0]) translate([0,arcradius,0]) sphere(5);
+			translate([0,arcradius,0]) sphere(RAD);
+			rotate([0,0,degrees]) translate([0,arcradius,0]) sphere(RAD);
 		}
 	}
 }
