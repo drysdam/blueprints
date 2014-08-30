@@ -130,13 +130,16 @@ module five() {
 	translate([-7,23,0]) rotate([90,0,90]) line(20);
 	translate([-7,23,0]) rotate([90,0,0]) line(20);
 	translate([0,-11,0]) rotate([0,0,-225]) arctube(14,255);
-	// translate([5,0,0]) rotate([90,0,90]) line(3);
 }
 
 module six() {
-//	translate([2,25,0]) rotate([90,0,-20]) line(40);
 	translate([26,-10,0]) rotate([0,0,30]) arctube(40,60);
 	translate([0,-13,0]) rotate([0,0,0]) arctube(14,360);
+}
+
+module seven() {
+	translate([0,25,0]) rotate([90,0,90]) line(35);
+	translate([110,-40,0]) rotate([0,0,50]) arctube(100,31);
 }
 
 // spacing will never be right here...
@@ -166,3 +169,4 @@ translate([0,0,0]) three();
 translate([25,0,0]) four();
 translate([90,0,0]) five();
 translate([135,0,0]) six();
+translate([160,0,0]) seven();
