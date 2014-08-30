@@ -120,6 +120,12 @@ module three() {
 	translate([5,0,0]) rotate([90,0,90]) line(3);
 }
 
+module four() {
+	translate([30,25,0]) rotate([90,0,-45]) line(35);
+	translate([30,25,0]) rotate([90,0,0]) line(50);
+	translate([5,0,0]) rotate([90,0,90]) line(35);
+}
+
 // spacing will never be right here...
 module write(letters) {
 	for (letter = letters) {
@@ -144,3 +150,4 @@ translate([-100,0,0]) zero();
 translate([-70,0,0]) one();
 translate([-40,0,0]) two();
 translate([0,0,0]) three();
+translate([25,0,0]) four();
