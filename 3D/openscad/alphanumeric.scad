@@ -133,6 +133,12 @@ module five() {
 	// translate([5,0,0]) rotate([90,0,90]) line(3);
 }
 
+module six() {
+//	translate([2,25,0]) rotate([90,0,-20]) line(40);
+	translate([26,-10,0]) rotate([0,0,30]) arctube(40,60);
+	translate([0,-13,0]) rotate([0,0,0]) arctube(14,360);
+}
+
 // spacing will never be right here...
 module write(letters) {
 	for (letter = letters) {
@@ -159,3 +165,4 @@ translate([-40,0,0]) two();
 translate([0,0,0]) three();
 translate([25,0,0]) four();
 translate([90,0,0]) five();
+translate([135,0,0]) six();
