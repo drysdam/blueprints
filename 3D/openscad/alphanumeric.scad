@@ -1,8 +1,16 @@
+RAD=5;
+
+module line(length) {
+	cylinder(r=RAD, h=length);
+	sphere(r=RAD);
+	translate([0,0,length]) sphere(r=RAD);
+}
+
 module arcsegment(arcradius, degrees) {
 	stepsize=10;
 	bigrad=arcradius*2;
 	steps=floor(degrees/stepsize);
-	for(i=[1:steps]) {
+	for(i=[1:1:steps]) {
 		translate([0,0,-7]) {
 			linear_extrude(height=15) {
 				polygon(points=[
@@ -85,6 +93,17 @@ module r() {
 	}
 }
 
+module zero() {
+	// TODO: make an ellipse function so scale doesn't ruin line
+	// thickness. better yet, control line thickness so can have thing
+	// parts on top and bottom, like "real" letters/numbers
+	scale([.75,1,1]) rotate([90,0,0]) arctube(25,360);
+}
+
+module one() {
+	translate([0,0,-25]) line(50);
+}
+
 // spacing will never be right here...
 module write(letters) {
 	for (letter = letters) {
@@ -103,4 +122,7 @@ module dpr() {
 	}
 }
 
-dpr();
+//dpr();
+//one();
+translate([-60,0,0]) zero();
+translate([-30,0,0]) one();
