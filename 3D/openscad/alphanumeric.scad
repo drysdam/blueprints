@@ -97,11 +97,11 @@ module zero() {
 	// TODO: make an ellipse function so scale doesn't ruin line
 	// thickness. better yet, control line thickness so can have thing
 	// parts on top and bottom, like "real" letters/numbers
-	scale([.75,1,1]) rotate([90,0,0]) arctube(25,360);
+	scale([.75,1,1]) arctube(25,360);
 }
 
 module one() {
-	translate([0,0,-25]) line(50);
+	rotate([90,0,0]) translate([0,0,-25]) line(50);
 }
 
 // spacing will never be right here...
