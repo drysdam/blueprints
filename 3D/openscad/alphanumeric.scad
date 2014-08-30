@@ -108,6 +108,12 @@ module one() {
 	rotate([90,0,0]) translate([0,0,-25]) line(50);
 }
 
+module two() {
+	translate([0,10,0]) rotate([0,0,-150]) arctube(15,230);
+	translate([11,0,0]) rotate([90,0,-45]) line(35);
+	translate([-13,-25,0]) rotate([90,0,90]) line(29);
+}
+
 // spacing will never be right here...
 module write(letters) {
 	for (letter = letters) {
@@ -130,3 +136,4 @@ module dpr() {
 //one();
 translate([-60,0,0]) zero();
 translate([-30,0,0]) one();
+two();
