@@ -36,7 +36,7 @@ module arcsegment(arcradius, degrees) {
 	}
 }
 
-module arctube(arcradius, degrees) {
+module arctube(arcradius, degrees, ballend=true) {
 	render() {
 		difference() {
 			rotate_extrude(convexity=4) {
@@ -45,6 +45,10 @@ module arctube(arcradius, degrees) {
 				}
 			}
 			arcsegment(arcradius, 360-degrees);
+		}
+		if (ballend) {
+			translate([0,arcradius,0]) sphere(5);
+			rotate([degrees,0,0]) translate([0,arcradius,0]) sphere(5);
 		}
 	}
 }
