@@ -147,6 +147,13 @@ module eight() {
 	translate([0,-13,0]) rotate([0,0,0]) arctube(14,360);
 }
 
+module nine() {
+	rotate([0,0,180]) {
+		translate([26,-10,0]) rotate([0,0,30]) arctube(40,60);
+		translate([0,-13,0]) rotate([0,0,0]) arctube(14,360);
+	}
+}
+
 // spacing will never be right here...
 module write(letters) {
 	for (letter = letters) {
@@ -176,3 +183,4 @@ translate([90,0,0]) five();
 translate([135,0,0]) six();
 translate([160,0,0]) seven();
 translate([215,0,0]) eight();
+translate([255,0,0]) nine();
