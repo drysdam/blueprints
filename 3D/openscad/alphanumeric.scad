@@ -154,6 +154,10 @@ module nine() {
 	}
 }
 
+module point() {
+	translate([0,-25,0]) sphere(RAD);
+}
+
 module digit(n) {
 	if (n==0) {
 		zero();
@@ -208,6 +212,8 @@ module dpr() {
 // translate([160,0,0]) seven();
 // translate([215,0,0]) eight();
 // translate([255,0,0]) nine();
+//point();
+//one();
 // for (i=[0:9]) {
 // 	digit(i);
 // }
