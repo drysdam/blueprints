@@ -121,9 +121,9 @@ module three() {
 }
 
 module four() {
-	translate([30,25,0]) rotate([90,0,-45]) line(35);
-	translate([30,25,0]) rotate([90,0,0]) line(50);
-	translate([5,0,0]) rotate([90,0,90]) line(35);
+	translate([10,25,0]) rotate([90,0,-45]) line(35);
+	translate([10,25,0]) rotate([90,0,0]) line(50);
+	translate([-15,0,0]) rotate([90,0,90]) line(35);
 }
 
 module five() {
@@ -138,8 +138,8 @@ module six() {
 }
 
 module seven() {
-	translate([0,25,0]) rotate([90,0,90]) line(35);
-	translate([110,-40,0]) rotate([0,0,50]) arctube(100,31);
+	translate([-15,25,0]) rotate([90,0,90]) line(35);
+	translate([95,-40,0]) rotate([0,0,50]) arctube(100,31);
 }
 
 module eight() {
@@ -151,6 +151,30 @@ module nine() {
 	rotate([0,0,180]) {
 		translate([26,-10,0]) rotate([0,0,30]) arctube(40,60);
 		translate([0,-13,0]) rotate([0,0,0]) arctube(14,360);
+	}
+}
+
+module digit(n) {
+	if (n==0) {
+		zero();
+	} else if (n==1) {
+		one();
+	} else if (n==2) {
+		two();
+	} else if (n==3) {
+		three();
+	} else if (n==4) {
+		four();
+	} else if (n==5) {
+		five();
+	} else if (n==6) {
+		six();
+	} else if (n==7) {
+		seven();
+	} else if (n==8) {
+		eight();
+	} else if (n==9) {
+		nine();
 	}
 }
 
@@ -174,13 +198,16 @@ module dpr() {
 
 //dpr();
 //one();
-translate([-100,0,0]) zero();
-translate([-70,0,0]) one();
-translate([-40,0,0]) two();
-translate([0,0,0]) three();
-translate([25,0,0]) four();
-translate([90,0,0]) five();
-translate([135,0,0]) six();
-translate([160,0,0]) seven();
-translate([215,0,0]) eight();
-translate([255,0,0]) nine();
+// translate([-100,0,0]) zero();
+// translate([-70,0,0]) one();
+// translate([-40,0,0]) two();
+// translate([0,0,0]) three();
+// translate([25,0,0]) four();
+// translate([90,0,0]) five();
+// translate([135,0,0]) six();
+// translate([160,0,0]) seven();
+// translate([215,0,0]) eight();
+// translate([255,0,0]) nine();
+// for (i=[0:9]) {
+// 	digit(i);
+// }
