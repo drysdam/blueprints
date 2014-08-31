@@ -57,33 +57,20 @@ module socketball(ball_width1, ball_width2, rod_width, rod_length) {
 	translate([0,0,rod_length]) sphere(ball_width2/2.0);
 }
 
-module labels() {
-	for (i=[0:3]) {
-		translate([i*20,-10,-16]) scale([.2,.2,.2]) rotate([90,0,0]) digit(i+1);
-	}
-	for (i=[0:3]) {
-		translate([i*20,30,-16]) scale([.2,.2,.2]) rotate([90,0,180]) digit(i+5);
-	}
-}
-
 // demo
 $fn=50;
 
 include <alphanumeric.scad>;
 
 difference() {
-	translate([-15,-10,-24]) cube([90,40,15]);
-	labels();
+	translate([-7.5,-5,-17]) cube([60,10,10]);
+	for (i=[0:3]) {
+		translate([i*15,-5,-12]) scale(.1) rotate([90,0,0]) digit(i);
+	}
 }
 for (i=[0:3]) {
-	translate([i*20,0,0]) rotate([0,180,0]) ball(10,6,10);
-	translate([i*20,0,0]) socket(10,6,20,i*.25+.25);
-//	translate([i*20,-10,-16]) scale([.2,.2,.2]) rotate([90,0,0]) digit(i+1);
-}
-for (i=[0:3]) {
-	translate([i*20,20,0]) rotate([0,180,0]) ball(10,6,10);
-	translate([i*20,20,0]) socket(10,6,20,i*.25+1.25);
-//	translate([i*20,30,-16]) scale([.2,.2,.2]) rotate([90,0,180]) digit(i+5);
+	translate([i*15,0,0]) rotate([0,180,0]) ball(7,4,10);
+	translate([i*15,0,0]) socket(7,4,20,i*.05+.15);
 }
 // rotate([0,0,0]) ball(10, 3, 20);
 //rotate([0,180,0]) socket(10, 3, 20);
