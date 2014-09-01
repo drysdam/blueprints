@@ -1,13 +1,13 @@
 module polyhedron2(points, faces, thickness, spherical=false) {
 	for (face = faces) {
-		for (pnum = face) {
+		for (facepos = [0:len(face)-1]) {
 			if (spherical) {
-				line_rtp(points[pnum], 
-					(pnum+1)>=len(points)?points[0]:points[pnum+1], 
+				line_rtp(points[face[facepos]], 
+					facepos+1>=len(face)?points[face[0]]:points[face[facepos+1]], 
 					thickness, true);
 			} else {
-				line_xyz(points[pnum], 
-					(pnum+1)>=len(points)?points[0]:points[pnum+1], 
+				line_xyz(points[face[facepos]], 
+					facepos+1>=len(face)?points[face[0]]:points[face[facepos+1]], 
 					thickness, true);
 			}
 		}
@@ -53,4 +53,12 @@ module line_xyz(xyz1, xyz2, thickness, rounded=true) {
 // line_rtp([100,120,0], [100,240,0], 5);
 // line_rtp([100,240,0], [100,0,0], 5);
 //polyhedron2([[0,0,0],[50,50,50],[50,0,0]], [[0, 1, 2]], 3);
-//polyhedron2([[50,0,0],[50,90,0],[50,180,0],[50,270,0]], [[0, 1, 2, 3]], 3, true);
+// polyhedron2([
+// 		[50,0,0],[50,90,0],[50,90,90],
+// 		[50,90,180],[50,90,270],[50,180,0]], 
+// 	[
+// 		[0, 1, 2],[0, 2, 3],
+// 		[0, 3, 4],[0, 4, 1],
+// 		[5, 2, 1],[5, 3, 2],
+// 		[5, 4, 3],[5, 1, 4]
+// 	], 3, true);
