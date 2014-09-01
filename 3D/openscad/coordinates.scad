@@ -1,3 +1,19 @@
+module polyhedron2(points, faces, thickness, spherical=false) {
+	for (face = faces) {
+		for (pnum = face) {
+			if (spherical) {
+				line_rtp(points[pnum], 
+					(pnum+1)>=len(points)?points[0]:points[pnum+1], 
+					thickness, true);
+			} else {
+				line_xyz(points[pnum], 
+					(pnum+1)>=len(points)?points[0]:points[pnum+1], 
+					thickness, true);
+			}
+		}
+	}
+}
+
 module line_rtp(rtp1, rtp2, thickness, rounded=true) {
 	// if all lines were from the origin, just doing rotates would be
 	// simple. but they aren't, so convert to xyz and use line_xyz for
@@ -36,3 +52,5 @@ module line_xyz(xyz1, xyz2, thickness, rounded=true) {
 // line_rtp([100,0,0], [100,120,0], 5);
 // line_rtp([100,120,0], [100,240,0], 5);
 // line_rtp([100,240,0], [100,0,0], 5);
+//polyhedron2([[0,0,0],[50,50,50],[50,0,0]], [[0, 1, 2]], 3);
+//polyhedron2([[50,0,0],[50,90,0],[50,180,0],[50,270,0]], [[0, 1, 2, 3]], 3, true);
