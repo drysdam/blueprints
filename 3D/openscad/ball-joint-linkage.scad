@@ -71,7 +71,7 @@ difference() {
 
 	translate([1*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
 	translate([1*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
-	translate([1*15+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
+	translate([1*15+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
 
 	translate([2*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
 	translate([2*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
@@ -79,7 +79,7 @@ difference() {
 
 	translate([3*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
 	translate([3*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(3);
-	translate([3*15+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
+	translate([3*15+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
 }
 for (i=[0:3]) {
 	translate([i*15,0,0]) rotate([0,180,0]) ball(7,4,10);
