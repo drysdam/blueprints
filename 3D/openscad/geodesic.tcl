@@ -38,8 +38,33 @@ proc subdivide { points faces } {
 	return [list $points2 $faces2]
 }
 
-set points {{0 0} {1 1} {2 0}}
+proc list2vector { l } {
+	set vect \[
+	set comma1 ""
+	foreach litem $l {
+		append vect ${comma1}\[
+		set comma2 ""
+		foreach sublitem $litem {
+			append vect "$comma2$sublitem"
+			set comma2 ,
+		}
+		append vect \]
+		set comma1 ,
+	}
+	append vect \]
+	return $vect
+}
+
+proc printit { points faces } {
+	puts "include <coordinates.scad>;"
+	puts "polyhedron2([list2vector $points], [list2vector $faces], 3);"
+}
+
+
+set points {{0 0} {100 100} {200 0}}
 set faces {{0 1 2}}
+printit $points $faces
+exit
 
 puts "level 0"
 puts $points
