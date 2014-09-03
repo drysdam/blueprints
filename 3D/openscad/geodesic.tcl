@@ -76,9 +76,11 @@ proc printit { points faces } {
 }
 
 proc print_unique_lines { points faces } {
+	global fn
 	array unset linesdone()
 
 	puts "include <coordinates.scad>;"
+	puts "\$fn=$fn;"
 	foreach face $faces {
 		for {set i 0} {$i < [llength $face]} {incr i} {
 			set pnum [lindex $face $i]
@@ -89,7 +91,7 @@ proc print_unique_lines { points faces } {
 			set first [lindex $points $pnum] 
 			set second [lindex $points $nextpnum] 
 			if {![info exists linesdone($first,$second)]} {
-				puts "line_xyz(\[[join $first ,]\], \[[join $second ,]\], 3);"
+				puts "line_xyz(\[[join $first ,]\], \[[join $second ,]\], 2);"
 				set linesdone($first,$second) 1
 				set linesdone($second,$first) 1
 			}
@@ -97,10 +99,26 @@ proc print_unique_lines { points faces } {
 	}
 }
 
+proc push_to_radius { points radius } {
+	set newpoints {}
+	foreach point $points {
+		lassign $point x y z
+		set len [expr sqrt($x*$x+$y*$y+$z*$z)]
+		set factor [expr $radius/($len*1.0)]
+		lappend newpoints [list [expr $x*$factor] [expr $y*$factor] [expr $z*$factor]]
+	}
+	return $newpoints
+}
 
-set points {{0 0 500} {500 0 0} {0 500 0} {-500 0 0} {0 -500 0} {0 0 -500}}
+global fn
+set fn [lindex $argv 0]
+set levels [lindex $argv 1]
+
+set points {{0 0 100} {100 0 0} {0 100 0} {-100 0 0} {0 -100 0} {0 0 -100}}
 set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
 		   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
-# lassign [subdivide $points $faces] points faces
-# lassign [subdivide $points $faces] points faces
+for {set l 0} {$l < $levels} {incr l} {
+	lassign [subdivide $points $faces] points faces
+	set points [push_to_radius $points 50]
+}
 print_unique_lines $points $faces
