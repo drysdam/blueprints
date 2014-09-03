@@ -76,9 +76,9 @@ proc printit { points faces } {
 }
 
 
-set points {{0 0 0} {100 100 0} {200 0 0}}
-set faces {{0 1 2}}
+set points {{0 0 500} {500 0 0} {0 500 0} {-500 0 0} {0 -500 0} {0 0 -500}}
+set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
+		   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
 lassign [subdivide $points $faces] points faces
 lassign [subdivide $points $faces] points faces
 printit $points $faces
-exit
