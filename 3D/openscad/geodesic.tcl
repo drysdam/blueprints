@@ -75,10 +75,32 @@ proc printit { points faces } {
 	puts "polyhedron2([list2vector $points], [list2vector $faces], 3);"
 }
 
+proc print_unique_lines { points faces } {
+	array unset linesdone()
+
+	puts "include <coordinates.scad>;"
+	foreach face $faces {
+		for {set i 0} {$i < [llength $face]} {incr i} {
+			set pnum [lindex $face $i]
+			set nextpnum [lindex $face [expr $i + 1]]
+			if {$i + 1 >= [llength $face]} {
+				set nextpnum [lindex $face 0]
+			}
+			set first [lindex $points $pnum] 
+			set second [lindex $points $nextpnum] 
+			if {![info exists linesdone($first,$second)]} {
+				puts "line_xyz(\[[join $first ,]\], \[[join $second ,]\], 3);"
+				set linesdone($first,$second) 1
+				set linesdone($second,$first) 1
+			}
+		}
+	}
+}
+
 
 set points {{0 0 500} {500 0 0} {0 500 0} {-500 0 0} {0 -500 0} {0 0 -500}}
 set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
 		   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
-lassign [subdivide $points $faces] points faces
-lassign [subdivide $points $faces] points faces
-printit $points $faces
+# lassign [subdivide $points $faces] points faces
+# lassign [subdivide $points $faces] points faces
+print_unique_lines $points $faces
