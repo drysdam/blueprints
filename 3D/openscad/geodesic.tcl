@@ -1,5 +1,39 @@
 #!/usr/bin/env tclsh8.5
 
+proc octahedron { radius } {
+	set points {{0 0 100} {100 0 0} {0 100 0} {-100 0 0} {0 -100 0} {0 0 -100}}
+	set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
+				   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
+	set points [push_to_radius $points $radius]
+	return [list $points $faces]
+}
+
+proc icosahedron { radius } {
+	set pi 3.14159
+
+	set points {{0 0 1}}
+	for {set k 0} {$k < 5} {incr k} {
+		set x [expr cos($k*72*$pi/180.0)]
+		set y [expr sin($k*72*$pi/180.0)]
+		set z [expr sin($pi/6.0)]
+		lappend points [list $x $y $z]
+	}
+	for {set k 0} {$k < 5} {incr k} {
+		set x [expr cos(($k*72 + 36)*$pi/180.0)]
+		set y [expr sin(($k*72 + 36)*$pi/180.0)]
+		set z [expr -sin($pi/6.0)]
+		lappend points [list $x $y $z]
+	}
+	lappend points {0 0 -1}
+	set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 5} {0 5 1} 
+		{1 6 2} {2 7 3} {3 8 4} {4 9 5} {5 10 1}
+		{6 2 7} {7 3 8} {8 4 9} {9 5 10} {10 1 6}
+		{11 6 7} {11 7 8} {11 8 9} {11 9 10} {11 10 6}}
+
+	set points [push_to_radius $points $radius]
+	return [list $points $faces]
+}
+
 proc subdivide_triangle { points } {
 	lassign [lindex $points 0] x1 y1 z1
 	lassign [lindex $points 1] x2 y2 z2
@@ -114,9 +148,8 @@ global fn
 set fn [lindex $argv 0]
 set levels [lindex $argv 1]
 
-set points {{0 0 100} {100 0 0} {0 100 0} {-100 0 0} {0 -100 0} {0 0 -100}}
-set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
-		   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
+#lassign [octahedron 15] points faces
+lassign [icosahedron 15] points faces
 for {set l 0} {$l < $levels} {incr l} {
 	lassign [subdivide $points $faces] points faces
 	set points [push_to_radius $points 15]
