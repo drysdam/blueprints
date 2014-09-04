@@ -91,7 +91,7 @@ proc print_unique_lines { points faces } {
 			set first [lindex $points $pnum] 
 			set second [lindex $points $nextpnum] 
 			if {![info exists linesdone($first,$second)]} {
-				puts "line_xyz(\[[join $first ,]\], \[[join $second ,]\], 2);"
+				puts "line_xyz(\[[join $first ,]\], \[[join $second ,]\], 1);"
 				set linesdone($first,$second) 1
 				set linesdone($second,$first) 1
 			}
@@ -119,14 +119,14 @@ set faces {{0 1 2} {0 2 3} {0 3 4} {0 4 1}\
 		   {5 2 1} {5 3 2} {5 4 3} {5 1 4}}
 for {set l 0} {$l < $levels} {incr l} {
 	lassign [subdivide $points $faces] points faces
-	set points [push_to_radius $points 50]
+	set points [push_to_radius $points 15]
 }
 set newpoints {}
 foreach point $points {
 	lassign $point x y z
 	if {$z > 0} {
 		set newz [expr $z * 1.5]
-	} else {
+	} else { 
 		set newz $z
 	}
 	lappend newpoints [list $x $y $newz]
