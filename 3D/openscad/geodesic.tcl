@@ -121,4 +121,15 @@ for {set l 0} {$l < $levels} {incr l} {
 	lassign [subdivide $points $faces] points faces
 	set points [push_to_radius $points 50]
 }
+set newpoints {}
+foreach point $points {
+	lassign $point x y z
+	if {$z > 0} {
+		set newz [expr $z * 1.5]
+	} else {
+		set newz $z
+	}
+	lappend newpoints [list $x $y $newz]
+}
+set points $newpoints
 print_unique_lines $points $faces
