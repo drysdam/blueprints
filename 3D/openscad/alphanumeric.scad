@@ -69,8 +69,8 @@ module halfcircle(stublength=0) {
 }
 
 module d() {
-	rotate([90,0,0]) {
- 		cylinder(r=5,h=80);
+	translate([0,-RAD,0]) rotate([90,0,0]) {
+ 		line(80);
 	}
 	translate([-10,-25,0]) {
 		halfcircle(10);
@@ -78,34 +78,28 @@ module d() {
 }
 
 module k() {
-	rotate([90,0,0]) {
- 		cylinder(r=5,h=80);
+	translate([0,-RAD,0]) rotate([90,0,0]) {
+ 		line(80);
 	}
-	difference() {
-		translate([0,-25,0]) rotate([90,0,40]) {
- 			cylinder(r=5,h=40);
-		}
-		translate([23,-60,0]) cube([3*RAD,3*RAD,3*RAD], center=true);
+	translate([0,-25,0]) rotate([90,0,40]) {
+ 		line(30);
 	}
-	difference() {
-		translate([5,-30,0]) rotate([90,0,145]) {
- 			cylinder(r=5,h=40);
-		}
-		translate([25,1.5*RAD,0]) cube([3*RAD,3*RAD,3*RAD], center=true);
+	translate([5,-30,0]) rotate([90,0,145]) {
+ 		line(30);
 	}
 }
 
 module n() {
-	rotate([90,0,0]) {
- 		cylinder(r=5,h=45);
+	translate([0,-RAD,0]) rotate([90,0,0]) {
+ 		line(40);
 	}
-	translate([15,-25,0]) {
+	translate([17,-29,0]) {
 		rotate([0,0,90]) {
-			arctube(15,180);
+			arctube(17,180);
 		}
 	}
-	translate([30,0,0]) rotate([90,0,0]) {
- 		cylinder(r=5,h=25);
+	translate([34,-RAD,0]) rotate([90,0,0]) {
+ 		line(24);
 	}
 }
 
@@ -118,8 +112,8 @@ module p() {
 }
 
 module r() {
-	rotate([90,0,0]) {
- 		cylinder(r=5,h=50);
+	translate([0,-RAD,0]) rotate([90,0,0]) {
+ 		line(40);
 	}
 	translate([20,-25,0]) {
 		rotate([0,0,90]) {
@@ -129,17 +123,13 @@ module r() {
 }
 
 module v() {
-	difference() {
-		union() {
-			rotate([90,0,25]) {
- 				cylinder(r=5,h=50);
-			}
-			rotate([90,0,-25]) {
- 				cylinder(r=5,h=50);
-			}
+	translate([0,-RAD,0]) {
+		rotate([90,0,25]) {
+ 			line(40);
 		}
-		translate([0,3,0]) cube([10,6,3*RAD],center=true);
-		translate([0,-45,0]) cube([55,6,3*RAD],center=true);
+		rotate([90,0,-25]) {
+ 			line(40);
+		}
 	}
 }
 
@@ -253,11 +243,13 @@ module knvr() {
 	translate([130,0,0]) r();
 }
 
-// translate([0,0,0]) d();
-// translate([30,0,0]) k();
-// translate([75,0,0]) n();
-// translate([140,0,0]) v();
-knvr();
+translate([0,0,0]) d();
+translate([30,0,0]) k();
+translate([75,0,0]) n();
+translate([125,0,0]) p();
+translate([175,0,0]) r();
+translate([250,0,0]) v();
+//knvr();
 //dpr();
 //one();
 // translate([-100,0,0]) zero();
