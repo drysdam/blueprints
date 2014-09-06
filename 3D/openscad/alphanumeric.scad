@@ -95,6 +95,20 @@ module k() {
 	}
 }
 
+module n() {
+	rotate([90,0,0]) {
+ 		cylinder(r=5,h=45);
+	}
+	translate([15,-25,0]) {
+		rotate([0,0,90]) {
+			arctube(15,180);
+		}
+	}
+	translate([30,0,0]) rotate([90,0,0]) {
+ 		cylinder(r=5,h=25);
+	}
+}
+
 module p() {
 	translate([0,-50,0]) {
 		rotate([0,0,180]) {
@@ -111,6 +125,21 @@ module r() {
 		rotate([0,0,90]) {
 			arctube(20,120);
 		}
+	}
+}
+
+module v() {
+	difference() {
+		union() {
+			rotate([90,0,25]) {
+ 				cylinder(r=5,h=50);
+			}
+			rotate([90,0,-25]) {
+ 				cylinder(r=5,h=50);
+			}
+		}
+		translate([0,3,0]) cube([10,6,3*RAD],center=true);
+		translate([0,-45,0]) cube([55,6,3*RAD],center=true);
 	}
 }
 
@@ -217,9 +246,18 @@ module dpr() {
 	}
 }
 
-translate([0,0,0]) d();
-translate([30,0,0]) k();
+module knvr() {
+	k();
+	translate([40,0,0]) n();
+	translate([100,0,0]) v();
+	translate([130,0,0]) r();
+}
 
+// translate([0,0,0]) d();
+// translate([30,0,0]) k();
+// translate([75,0,0]) n();
+// translate([140,0,0]) v();
+knvr();
 //dpr();
 //one();
 // translate([-100,0,0]) zero();
