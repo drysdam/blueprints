@@ -77,6 +77,24 @@ module d() {
 	}
 }
 
+module k() {
+	rotate([90,0,0]) {
+ 		cylinder(r=5,h=80);
+	}
+	difference() {
+		translate([0,-25,0]) rotate([90,0,40]) {
+ 			cylinder(r=5,h=40);
+		}
+		translate([23,-60,0]) cube([3*RAD,3*RAD,3*RAD], center=true);
+	}
+	difference() {
+		translate([5,-30,0]) rotate([90,0,145]) {
+ 			cylinder(r=5,h=40);
+		}
+		translate([25,1.5*RAD,0]) cube([3*RAD,3*RAD,3*RAD], center=true);
+	}
+}
+
 module p() {
 	translate([0,-50,0]) {
 		rotate([0,0,180]) {
@@ -198,6 +216,9 @@ module dpr() {
 		r();
 	}
 }
+
+translate([0,0,0]) d();
+translate([30,0,0]) k();
 
 //dpr();
 //one();
