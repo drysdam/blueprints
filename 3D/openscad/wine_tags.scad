@@ -1,6 +1,8 @@
+// sizes are defined as thousandths of an inch, so scale by .0254 to
+// print in mm
 include <alphanumeric.scad>;
 
-$fn=20;
+$fn=50;
 
 module sharp_corner_ring() {
 	difference() {
@@ -37,10 +39,21 @@ module base_ring() {
 	}
 }
 
-// dpr ring
-base_ring();
-difference() {
-	scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,105]) arcsegment(500, 30);
-	translate([-400,30,3]) rotate([0,0,-90]) dpr();
-	scale([1,1,6]) translate([0,0,7]) rotate([0,0,106]) arcsegment(350, 32);
+// dpr/knvr ring
+scale(.0254) {
+	base_ring();
+	difference() {
+		scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,105]) {
+			arcsegment(500, 30);
+		}
+		translate([-400,50,3]) rotate([0,0,-90]) {
+			dpr();
+		}
+		// translate([-390,75,3]) rotate([0,0,-90]) {
+		// 	knvr();
+		// }
+		scale([1,1,6]) translate([0,0,7]) rotate([0,0,107.5]) {
+			arcsegment(350, 35);
+		}
+	}
 }
