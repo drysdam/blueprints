@@ -69,10 +69,10 @@ module halfcircle(stublength=0) {
 }
 
 module d() {
-	translate([0,-RAD,0]) rotate([90,0,0]) {
+	translate([30,-RAD,0]) rotate([90,0,0]) {
  		line(80);
 	}
-	translate([-10,-25,0]) {
+	translate([20,-25,0]) {
 		halfcircle(10);
 	}
 }
@@ -81,10 +81,10 @@ module k() {
 	translate([0,-RAD,0]) rotate([90,0,0]) {
  		line(80);
 	}
-	translate([0,-25,0]) rotate([90,0,40]) {
+	translate([0,-25,0]) rotate([90,0,45]) {
  		line(30);
 	}
-	translate([5,-30,0]) rotate([90,0,145]) {
+	translate([7,-30,0]) rotate([90,0,145]) {
  		line(30);
 	}
 }
@@ -104,7 +104,7 @@ module n() {
 }
 
 module p() {
-	translate([0,-50,0]) {
+	translate([30,-50,0]) {
 		rotate([0,0,180]) {
 			d();
 		}
@@ -123,12 +123,12 @@ module r() {
 }
 
 module v() {
-	translate([0,-RAD,0]) {
+	translate([20,-RAD,0]) {
 		rotate([90,0,25]) {
- 			line(40);
+ 			line(43);
 		}
 		rotate([90,0,-25]) {
- 			line(40);
+ 			line(43);
 		}
 	}
 }
@@ -228,10 +228,10 @@ module write(letters) {
 
 module dpr() {
 	d();
-	translate([15,0,0]) {
+	translate([45,0,0]) {
 		p();
 	}
-	translate([58,0,0]) {
+	translate([87,0,0]) {
 		r();
 	}
 }
@@ -239,18 +239,18 @@ module dpr() {
 module knvr() {
 	k();
 	translate([40,0,0]) n();
-	translate([100,0,0]) v();
-	translate([130,0,0]) r();
+	translate([85,0,0]) v();
+	translate([140,0,0]) r();
 }
 
-translate([0,0,0]) d();
-translate([30,0,0]) k();
-translate([75,0,0]) n();
-translate([125,0,0]) p();
-translate([175,0,0]) r();
-translate([250,0,0]) v();
-//knvr();
-//dpr();
+// translate([0,0,0]) d();
+// translate([45,0,0]) k();
+// translate([85,0,0]) n();
+// translate([135,0,0]) p();
+// translate([180,0,0]) r();
+// translate([220,0,0]) v();
+// knvr();
+// dpr();
 //one();
 // translate([-100,0,0]) zero();
 // translate([-70,0,0]) one();
