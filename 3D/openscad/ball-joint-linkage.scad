@@ -63,27 +63,27 @@ $fn=50;
 include <alphanumeric.scad>;
 
 difference() {
-	translate([-7.5,-5.25,-17]) cube([60,10.5,10]);
+	translate([-6,-5.25,-15.5]) cube([50,10.5,7]);
 
-	translate([0*15-3,-5,-12]) scale(.1) rotate([90,0,0]) point();
-	translate([0*15-1,-5,-12]) scale(.1) rotate([90,0,0]) digit(1);
-	translate([0*15+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(5);
+	translate([0*12-3,-5,-12]) scale(.1) rotate([90,0,0]) point();
+	translate([0*12-1,-5,-12]) scale(.1) rotate([90,0,0]) digit(1);
+	translate([0*12+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(5);
 
-	translate([1*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
-	translate([1*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
-	translate([1*15+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
+	translate([1*12-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
+	translate([1*12-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
+	translate([1*12+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
 
-	translate([2*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
-	translate([2*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
-	translate([2*15+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(5);
+	translate([2*12-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
+	translate([2*12-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(2);
+	translate([2*12+2,-5,-12]) scale(.1) rotate([90,0,0]) digit(5);
 
-	translate([3*15-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
-	translate([3*15-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(3);
-	translate([3*15+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
+	translate([3*12-4.5,-5,-12]) scale(.1) rotate([90,0,0]) point();
+	translate([3*12-2,-5,-12]) scale(.1) rotate([90,0,0]) digit(3);
+	translate([3*12+2.5,-5,-12]) scale(.1) rotate([90,0,0]) digit(0);
 }
 for (i=[0:3]) {
-	translate([i*15,0,0]) rotate([0,180,0]) ball(7,4,10);
-	translate([i*15,0,0]) socket(7,4,20,i*.05+.15);
+	translate([i*12,0,0]) rotate([0,180,0]) ball(6,4,10);
+	translate([i*12,0,0]) socket(6,4,15,i*.05+.15);
 }
 // rotate([0,0,0]) ball(10, 3, 20);
 //rotate([0,180,0]) socket(10, 3, 20);
