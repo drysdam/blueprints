@@ -8,17 +8,16 @@ module line(length) {
 
 module arcsegment(arcradius, degrees) {
 	stepsize=10;
-	bigrad=arcradius*2;
 	steps=floor(degrees/stepsize);
 	for(i=[1:1:steps]) {
 		translate([0,0,-7]) {
 			linear_extrude(height=15) {
 				polygon(points=[
 						[0,0], 
-						[bigrad*sin((i-1)*stepsize),
-							bigrad*cos((i-1)*stepsize)], 
-						[bigrad*sin(i*stepsize+.1), 
-							bigrad*cos(i*stepsize+.1)]], 
+						[arcradius*sin((i-1)*stepsize),
+							arcradius*cos((i-1)*stepsize)], 
+						[arcradius*sin(i*stepsize+.1), 
+							arcradius*cos(i*stepsize+.1)]], 
 					paths=[[0,2,1]]);
 			}
 		}
@@ -27,10 +26,10 @@ module arcsegment(arcradius, degrees) {
 		linear_extrude(height=15) {
 			polygon(points=[
 					[0,0], 
-					[bigrad*sin(steps*stepsize),
-						bigrad*cos(steps*stepsize)], 
-					[bigrad*sin(degrees), 
-						bigrad*cos(degrees)]], 
+					[arcradius*sin(steps*stepsize),
+						arcradius*cos(steps*stepsize)], 
+					[arcradius*sin(degrees), 
+						arcradius*cos(degrees)]], 
 				paths=[[0,2,1]]);
 		}
 	}
@@ -44,7 +43,7 @@ module arctube(arcradius, degrees, ballend=true) {
 					circle(5);
 				}
 			}
-			arcsegment(arcradius, 360-degrees);
+			arcsegment(arcradius*2, 360-degrees);
 		}
 		if (ballend) {
 			translate([0,arcradius,0]) sphere(RAD);
