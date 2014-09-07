@@ -15,27 +15,20 @@ module sharp_corner_ring() {
 		}
 		// gap
 		translate([200,0,0]) {
-			cube([400,200,200],center=true);
+			cube([400,220,200],center=true);
 		}
 	}
-}
-
-module corner_rounder() {
-	translate([275,230,-10]) {
-		cylinder(r=20,h=200);
+	translate([330,120,0]) {
+		cylinder(r=30,h=60);
 	}
-	translate([275,-230,-10]) {
-		cylinder(r=20,h=200);
+	translate([330,-120,0]) {
+		cylinder(r=30,h=60);
 	}
-	translate([-100,0,0]) cube([730,800,200], center=true);
-	translate([265,250,0]) cube([50,50,200], center=true);
-	translate([265,-250,0]) cube([50,50,200], center=true);
 }
 
 module base_ring() {
 	intersection() {
 		sharp_corner_ring();
-//		corner_rounder();
 	}
 }
 
