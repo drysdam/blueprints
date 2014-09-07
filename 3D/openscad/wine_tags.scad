@@ -10,12 +10,12 @@ module sharp_corner_ring() {
 		difference() {
 			cylinder(r=750/2,h=60);
 			translate([0,0,-100]) {
-				cylinder(r=700/2,h=200);
+				cylinder(r=650/2,h=200);
 			}
 		}
 		// gap
 		translate([200,0,0]) {
-			cube([400,420,200],center=true);
+			cube([400,200,200],center=true);
 		}
 	}
 }
@@ -35,7 +35,7 @@ module corner_rounder() {
 module base_ring() {
 	intersection() {
 		sharp_corner_ring();
-		corner_rounder();
+//		corner_rounder();
 	}
 }
 
@@ -43,17 +43,17 @@ module base_ring() {
 scale(.0254) {
 	base_ring();
 	difference() {
-		scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,105]) {
-			arcsegment(500, 30);
+		scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,113.5]) {
+			arcsegment(550, 45);
 		}
-		translate([-400,50,3]) rotate([0,0,-90]) {
-			dpr();
-		}
-		// translate([-390,75,3]) rotate([0,0,-90]) {
-		// 	knvr();
-		// }
-		scale([1,1,6]) translate([0,0,7]) rotate([0,0,107.5]) {
-			arcsegment(350, 35);
+		scale([1,1,6]) translate([0,0,5]) rotate([0,0,120]) {
+			arcsegment(325, 60);
 		}
 	}
+	translate([-400,70,3]) rotate([0,0,-90]) scale(1.5) {
+		dpr();
+	}
+	// translate([-390,75,3]) rotate([0,0,-90]) {
+	// 	knvr();
+	// }
 }
