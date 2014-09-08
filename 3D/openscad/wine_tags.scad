@@ -43,10 +43,10 @@ scale(.0254) {
 			arcsegment(325, 60);
 		}
 	}
-	translate([-400,70,3]) rotate([0,0,-90]) scale(1.5) {
-		dpr();
-	}
-	// translate([-390,75,3]) rotate([0,0,-90]) {
-	// 	knvr();
+	// translate([-400,70,3]) rotate([0,0,-90]) scale(1.5) {
+	// 	dpr();
 	// }
+	translate([-370,120,3]) rotate([0,0,-90]) scale(1.7) {
+		knvr();
+	}
 }
