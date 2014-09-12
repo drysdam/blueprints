@@ -8,13 +8,18 @@ base=PCD*cos(PA);
 
 // diametral pitch
 DP=20;
-// circular pitch
-CP
-// working depth of tooth
+// working depth of tooth (from Machinery's Handbook)
 D=2/DP;
+// minimum whole depth (working depth + clearance, aka "D+f") (from
+// Machinery's Handbook)
+Df=2.157/DP;
+// "addendum" (amount of tooth above the PCD, so PCD+2*addendum = gear
+// blank size) (from Machinery's Handbook)
+addendum=1/DP;
+blankdiameter = PCD + 2*addendum;
 
 pi=3.14159265;
-intersection() {
+// intersection() {
 	translate([10,0,0]) {
 		linear_extrude(h=10) {
 			for(theta=[0:1:89]) {
@@ -45,4 +50,4 @@ intersection() {
 			}
 		}
 	}
-}
+// }
