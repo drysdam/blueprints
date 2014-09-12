@@ -24,7 +24,7 @@ module mouth_form() {
 	}
 }
 
-module ear() {
+module cat_ear() {
 	difference() {
 		cylinder(r1=5,r2=0,h=15);
 		translate([3,0,0]) rotate([0,15,0]) translate([0,0,-15]) cylinder(r=6,h=30);
@@ -42,32 +42,41 @@ module tail() {
 	sphere(r=3);
 }
 
-$fn=50;
-c="brown";
-color(c)
-difference() {
-	plain_head();
-	translate([18,-9,18]) {
-		eye_form();
+module cat() {
+	difference() {
+		plain_head();
+		translate([18,-9,18]) {
+			eye_form();
+		}
+		translate([18,9,18]) {
+			eye_form();
+		}
+ 		translate([20,0,14]) {
+			mouth_form();
+ 		}
 	}
-	translate([18,9,18]) {
-		eye_form();
+	rotate([20,0,0]) translate([10,0,30]) cat_ear();
+	rotate([-20,0,0]) translate([10,0,30]) cat_ear();
+	translate([-20,0,0]) tail();
+	offset=45;
+	legs=4;
+	for(leg=[1:legs]) {
+		rotate([0,0,leg*360/legs+offset]) translate([0,20,-20]) leg();
 	}
- 	translate([20,0,14]) {
-		mouth_form();
- 	}
 }
-color(c) rotate([20,0,0]) translate([10,0,30]) ear();
-color(c) rotate([-20,0,0]) translate([10,0,30]) ear();
-color(c) translate([-20,0,0]) tail();
-offset=45;
-legs=4;
-for(leg=[1:legs]) {
-	color(c) rotate([0,0,leg*360/legs+offset]) translate([0,20,-20]) leg();
+
+module slicer() {
+	cylinder(r=5,h=32);
+	translate([0,0,-35]) rotate([15,0,0]) cube([100,100,100], center=true);
 }
-//plain_head();
-// eye();
-//mouth_form();
-// rotate([0,0,0]) translate([0,20,-20]) leg();
-// rotate([0,0,120]) translate([0,20,-20]) leg();
-// rotate([0,0,240]) translate([0,20,-20]) leg();
+
+$fn=100;
+cat();
+// difference() {
+// 	cat();
+// 	slicer();
+// }
+// intersection() {
+// 	cat();
+// 	slicer();
+// }
