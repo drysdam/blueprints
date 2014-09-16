@@ -23,12 +23,16 @@ module hyperface(w=10){
 
 color("gray") 
 union() {
-	translate([0,0,5]) hyperface();
-	translate([0,0,15]) hyperface();
-	translate([0,0,25]) hyperface();
-	translate([0,0,35]) hyperface();
-	translate([10,0,25]) hyperface();
-	translate([-10,0,25]) hyperface();
-	translate([0,-10,25]) hyperface();
-	translate([0,10,25]) hyperface();
+	translate([8,0,0]) rotate([90,0,0]) face();
+	translate([0,-8,0]) rotate([90,0,0]) face();
+	translate([0,8,0]) rotate([90,0,0]) face();
+	translate([-8,0,0]) rotate([90,0,0]) face();
+	translate([-16,0,0]) rotate([90,0,0]) face();
+	translate([0,0,4]) hyperface();
+	translate([0,0,14]) hyperface();
+	translate([0,0,24]) hyperface();
+	translate([10,0,14]) hyperface();
+	translate([-10,0,14]) hyperface();
+	translate([0,-10,14]) hyperface();
+	translate([0,10,14]) hyperface();
 }
