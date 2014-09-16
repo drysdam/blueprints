@@ -16,10 +16,10 @@ module eye_form() {
 }
 
 module mouth_form() {
-	scale([.1,.8,.5]) {
+	scale([.2,.8,.5]) {
 		difference() {
 			sphere(8);
-			translate([0,0,5]) cube([20,20,8], center=true);
+			translate([0,0,5]) rotate([0,0,0]) cube([20,20,8], center=true);
 		}
 	}
 }
@@ -27,7 +27,7 @@ module mouth_form() {
 module cat_ear() {
 	difference() {
 		cylinder(r1=5,r2=0,h=15);
-		translate([3,0,0]) rotate([0,15,0]) translate([0,0,-15]) cylinder(r=6,h=30);
+		translate([3.5,0,0]) rotate([0,15,0]) translate([0,0,-15]) cylinder(r=6,h=30);
 }
 }
 
@@ -39,6 +39,7 @@ module leg() {
 }
 
 module tail() {
+	translate([0,0,0]) rotate([0,90,0]) cylinder(r=3,h=5);
 	sphere(r=3);
 }
 
@@ -57,7 +58,7 @@ module cat() {
 	}
 	rotate([20,0,0]) translate([10,0,30]) cat_ear();
 	rotate([-20,0,0]) translate([10,0,30]) cat_ear();
-	translate([-20,0,0]) tail();
+	translate([-22,0,0]) tail();
 	offset=45;
 	legs=4;
 	for(leg=[1:legs]) {
@@ -65,18 +66,18 @@ module cat() {
 	}
 }
 
-module slicer() {
+module slicer(x=0) {
 	cylinder(r=5,h=32);
-	translate([0,0,-35]) rotate([15,0,0]) cube([100,100,100], center=true);
+	translate([0,0,-35]) rotate([x,0,0]) cube([100,100,100], center=true);
 }
 
 $fn=100;
-cat();
-// difference() {
+scale(.6) cat();
+// rotate([-15,0,0]) scale(.5) difference() {
 // 	cat();
-// 	slicer();
+// 	slicer(15);
 // }
-// intersection() {
+// scale(.5) intersection() {
 // 	cat();
-// 	slicer();
+// 	slicer(15);
 // }
