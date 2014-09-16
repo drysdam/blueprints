@@ -35,18 +35,24 @@ module base_ring() {
 // dpr/knvr ring
 scale(.0254) {
 	base_ring();
-	difference() {
-		scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,113.5]) {
-			arcsegment(550, 45);
-		}
-		scale([1,1,6]) translate([0,0,5]) rotate([0,0,120]) {
-			arcsegment(325, 60);
-		}
-	}
-	// translate([-400,70,3]) rotate([0,0,-90]) scale(1.5) {
-	// 	dpr();
+
+translate([-75,0,0])
+difference() {
+	translate([-150,0,0]) cylinder(r=275,h=60);
+	translate([0,0,-5]) cylinder(r=300,h=70);
+}
+	// difference() {
+	// 	scale([1,1,4]) translate([0,0,7.5]) rotate([0,0,113.5]) {
+	// 		arcsegment(550, 45);
+	// 	}
+	// 	scale([1,1,6]) translate([0,0,5]) rotate([0,0,120]) {
+	// 		arcsegment(325, 60);
+	// 	}
 	// }
-	translate([-370,120,3]) rotate([0,0,-90]) scale(1.7) {
-		knvr();
-	}
+	// translate([-500,130,3]) scale(3.2) {
+	// 	d();
+	// }
+	// translate([-480,130,3]) scale(3.5) {
+	// 	k();
+	// }
 }
