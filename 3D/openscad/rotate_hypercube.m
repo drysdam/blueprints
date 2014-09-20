@@ -16,13 +16,16 @@ function result = polyhedron(vertices, edges)
 	edge = edges(e,:);
 	v1 = edge(1);
 	v2 = edge(2);
-	printf("line_xyz([%d, %d], [%d, %d], 5);\n", vertices(:,v1), vertices(:,v2));
+	printf("line_xyz([%f, %f], [%f, %f], 5);\n", vertices(:,v1), vertices(:,v2));
   endfor
 endfunction
 
-#rotate2(square,10)
+hyperface = [-20 20; 20 20; 20 -20; -20 -20]';
+rotate2(hyperface,10);
+printf("include <coordinates.scad>;\n");
+
+# polyhedron(rotate2(hyperface,1), [1 2; 2 3; 3 4; 4 1]);
+# polyhedron(rotate2(hyperface,2), [1 2; 2 3; 3 4; 4 1]);
 
 t = str2num(argv(){1});
-square = [-20 20; 20 20; 20 -20; -20 -20]';
-printf("include <coordinates.scad>;\n");
-polyhedron(rotate2(square,t), [1 2; 2 3; 3 4; 4 1]);
+polyhedron(rotate2(hyperface,t), [1 2; 2 3; 3 4; 4 1]);
