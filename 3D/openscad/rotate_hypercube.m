@@ -33,6 +33,70 @@ function result = rotate3(vertices, xdegrees, ydegrees, zdegrees)
   result = xrot * yrot * zrot * vertices;
 endfunction
 
+function result = rotate4(vertices, xydegrees, yzdegrees, zxdegrees,
+						  xwdegrees, ywdegrees, zwdegrees)
+  xyrad = pi*xydegrees/180;
+  yzrad = pi*yzdegrees/180;
+  zxrad = pi*zxdegrees/180;
+  xwrad = pi*xwdegrees/180;
+  ywrad = pi*ywdegrees/180;
+  zwrad = pi*zwdegrees/180;
+  
+# XY plane     
+  xy = [
+		cos(xyrad) sin(xyrad) 0 0 ;
+		-sin(xyrad) cos(xyrad) 0 0 ;
+		0    0   1 0 ;
+		0    0   0 1 ;
+        ];
+  
+# YZ plane     
+  yz = [
+		1   0    0   0 ;
+		0  cos(yzrad) sin(yzrad) 0 ;
+		0 -sin(yzrad) cos(yzrad) 0 ;
+		0   0    0   1 ;
+        ];
+
+# ZX plane     
+  zx = [
+		cos(zxrad) 0 -sin(zxrad) 0 ;
+		0   1   0   0 ;
+		sin(zxrad) 0  cos(zxrad) 0 ;
+		0   0   0   1 ;
+        ];
+
+# XW plane     
+  xw = [
+		cos(xwrad) 0 0 sin(xwrad) ;
+		0   1 0  0   ;
+		0   0 1  0   ;
+		-sin(xwrad) 0 0 cos(xwrad) ;
+		];
+  
+# YW plane     
+  yw = [
+		1  0   0   0   ;
+		0 cos(ywrad) 0 -sin(ywrad) ;
+		0  0   1   0   ;
+		0 sin(ywrad) 0  cos(ywrad) ;
+		];
+  
+# ZW plane
+  zw = [
+		1 0  0     0   ;
+		0 1  0     0   ;
+		0 0 cos(zwrad) -sin(zwrad) ;
+		0 0 sin(zwrad)  cos(zwrad) ;
+        ];
+
+  result = xy * vertices;
+endfunction
+
+function result = project43(vertices)
+  result = vertices(1:3,:);
+endfunction
+
 function result = polyhedron(vertices, edges)
   for e = 1:rows(edges)
 	edge = edges(e,:);
@@ -49,11 +113,21 @@ hyperfacev = [
 			 -20  20  20;
 			  20  20  20;
 			  20 -20  20;
-			 -20 -20  20
+			 -20 -20  20;
 			 -20  20 -20;
 			  20  20 -20;
 			  20 -20 -20;
 			 -20 -20 -20
+			 ]';
+hyperfacev = [
+			 -20  20  20 0;
+			  20  20  20 0;
+			  20 -20  20 0;
+			 -20 -20  20 0;
+			 -20  20 -20 0;
+			  20  20 -20 0;
+			  20 -20 -20 0;
+			 -20 -20 -20 0;
 			 ]';
 hyperfacee = [1 2; 2 3; 3 4; 4 1; 5 6; 6 7; 7 8; 8 5; 1 5; 2 6; 3 7; 4 8];
 
@@ -62,8 +136,13 @@ printf("include <coordinates.scad>;\n");
 
 # polyhedron(rotate2(hyperface,1), [1 2; 2 3; 3 4; 4 1]);
 # polyhedron(rotate2(hyperface,2), [1 2; 2 3; 3 4; 4 1]);
+#polyhedron(rotate3(hyperfacev,x,y,z), hyperfacee)
 
-x = str2num(argv(){1});
-y = str2num(argv(){2});
-z = str2num(argv(){3});
-polyhedron(rotate3(hyperfacev,x,y,z), hyperfacee)
+xy = str2num(argv(){1});
+#xy = 0;
+yz = 0;
+zx = 0;
+xw = 0;
+yw = 0;
+zw = 0;
+polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw)),hyperfacee);
