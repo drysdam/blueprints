@@ -93,7 +93,45 @@ function result = rotate4(vertices, xydegrees, yzdegrees, zxdegrees,
   result = xy * vertices;
 endfunction
 
+function result = cross4(U, V, W)
+								# 4D cross product takes 3 4-vectors and
+								# produces something perpendicular to
+								# all.
+        #             +-           -+
+        #             | i  j  k  l  |
+        # X4(U,V,W) = | U0 U1 U2 U3 |
+        #             | V0 V1 V2 V3 |
+        #             | W0 W1 W2 W3 |
+        #             +-           -+
+
+
+        #  |U1 U2 U3|    |U0 U2 U3|    |U0 U1 U3|    |U0 U1 U2|
+        # i|V1 V2 V3| - j|V0 V2 V3| + k|V0 V1 V3| - l|V0 V1 V2|
+        #  |W1 W2 W3|    |W0 W2 W3|    |W0 W1 W3|    |W0 W1 W2|
+
+  [U(2:4)'; 
+   V(2:4)'; 
+   W(2:4)']
+  result = zeros(4,1);
+  result(1) = det([U(2:4)'; 
+				   V(2:4)'; 
+				   W(2:4)']);
+  result(2) = -det([U(1) U(3) U(4);
+					V(1) V(3) V(4);
+					W(1) W(3) W(4)]);
+  result(3) = det([U(1) U(2) U(4);
+				   V(1) V(2) V(4);
+				   W(1) W(2) W(4)]);
+  result(4) = -det([U(1:3)'; 
+					V(1:3)'; 
+					W(1:3)']);
+endfunction
+
 function result = project43(vertices)
+  from = [100 100 100 100]';
+  to = [0 0 0 0]';
+  
+
   result = vertices(1:3,:);
 endfunction
 
@@ -138,8 +176,8 @@ printf("include <coordinates.scad>;\n");
 # polyhedron(rotate2(hyperface,2), [1 2; 2 3; 3 4; 4 1]);
 #polyhedron(rotate3(hyperfacev,x,y,z), hyperfacee)
 
-xy = str2num(argv(){1});
-#xy = 0;
+#xy = str2num(argv(){1});
+xy = 0;
 yz = 0;
 zx = 0;
 xw = 0;
