@@ -124,11 +124,11 @@ function result = cross4(U, V, W)
 					W(1:3)']);
 endfunction
 
-function result = project43(vertices)
-  from = [100 100 100 100000]';
+function result = project43(vertices, parallel)
+  from = [100 100 100 100]';
   to = [0 0 0 0]';
   up = [0 0 1 0]';
-  over = [0 0 1 1]'; # ???
+  over = [0 0 0 1]'; # ???
 
   D = (to - from);
   D /= vecmag(D);
@@ -141,10 +141,20 @@ function result = project43(vertices)
 
   C = cross4(D, A, B);
 
-  eyevertices = [A'; B'; C'; D'] * vertices;
+  eyevertices = [A'; B'; C'; D'] * (vertices - from);
 
-  # parallel, not perspective
-  result = eyevertices(1:3,:);
+  if (parallel) 
+								# parallel, not perspective
+	result = eyevertices(1:3,:);
+  else
+	theta4 = 60 * pi/180; # ?
+	T = tan(theta4/2);
+	result = [
+			  eyevertices(1,:)./(eyevertices(4,:) * T);
+			  eyevertices(2,:)./(eyevertices(4,:) * T);
+			  eyevertices(3,:)./(eyevertices(4,:) * T)
+			  ];
+  endif
 endfunction
 
 function result = polyhedron(vertices, edges)
@@ -195,4 +205,5 @@ zx = 0;
 xw = 0;
 yw = 0;
 zw = 0;
-polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw)),hyperfacee);
+polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),true),hyperfacee);
+#polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),false),hyperfacee);
