@@ -124,7 +124,7 @@ function result = cross4(U, V, W)
 					W(1:3)']);
 endfunction
 
-function result = project43(vertices, parallel)
+function result = project43(vertices, perspective)
   from = [100 100 100 100]';
   to = [0 0 0 0]';
   up = [0 0 1 0]';
@@ -143,17 +143,20 @@ function result = project43(vertices, parallel)
 
   eyevertices = [A'; B'; C'; D'] * (vertices - from);
 
-  if (parallel) 
-								# parallel, not perspective
-	result = eyevertices(1:3,:);
-  else
+  if (perspective)
 	theta4 = 60 * pi/180; # ?
 	T = tan(theta4/2);
-	result = [
-			  eyevertices(1,:)./(eyevertices(4,:) * T);
-			  eyevertices(2,:)./(eyevertices(4,:) * T);
-			  eyevertices(3,:)./(eyevertices(4,:) * T)
-			  ];
+								# this ends up normalized really tiny.
+								# website had some info on filling a
+								# 1x1x1 box, but let's just x100 for
+								# now.
+	result = 100 * [
+					eyevertices(1,:)./(eyevertices(4,:) * T);
+					eyevertices(2,:)./(eyevertices(4,:) * T);
+					eyevertices(3,:)./(eyevertices(4,:) * T)
+					];
+  else
+	result = eyevertices(1:3,:);
   endif
 endfunction
 
