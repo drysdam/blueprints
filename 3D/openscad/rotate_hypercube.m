@@ -109,9 +109,6 @@ function result = cross4(U, V, W)
         # i|V1 V2 V3| - j|V0 V2 V3| + k|V0 V1 V3| - l|V0 V1 V2|
         #  |W1 W2 W3|    |W0 W2 W3|    |W0 W1 W3|    |W0 W1 W2|
 
-  [U(2:4)'; 
-   V(2:4)'; 
-   W(2:4)']
   result = zeros(4,1);
   result(1) = det([U(2:4)'; 
 				   V(2:4)'; 
@@ -128,11 +125,26 @@ function result = cross4(U, V, W)
 endfunction
 
 function result = project43(vertices)
-  from = [100 100 100 100]';
+  from = [100 100 100 100000]';
   to = [0 0 0 0]';
-  
+  up = [0 0 1 0]';
+  over = [0 0 1 1]'; # ???
 
-  result = vertices(1:3,:);
+  D = (to - from);
+  D /= vecmag(D);
+  
+  A = cross4(up, over, D);
+  A /= vecmag(A);
+
+  B = cross4(over, D, A);
+  B /= vecmag(B);
+
+  C = cross4(D, A, B);
+
+  eyevertices = [A'; B'; C'; D'] * vertices;
+
+  # parallel, not perspective
+  result = eyevertices(1:3,:);
 endfunction
 
 function result = polyhedron(vertices, edges)
