@@ -90,7 +90,7 @@ function result = rotate4(vertices, xydegrees, yzdegrees, zxdegrees,
 		0 0 sin(zwrad)  cos(zwrad) ;
         ];
 
-  result = xy * vertices;
+  result = xy * yz * zx * xw * yw * zw * vertices;
 endfunction
 
 function result = cross4(U, V, W)
@@ -125,10 +125,10 @@ function result = cross4(U, V, W)
 endfunction
 
 function result = project43(vertices, perspective)
-  from = [100 100 100 100]';
+  from = [0 0 0 100]';
   to = [0 0 0 0]';
   up = [0 0 1 0]';
-  over = [0 0 0 1]'; # ???
+  over = [0 1 1 1]'; # ???
 
   D = (to - from);
   D /= vecmag(D);
@@ -183,16 +183,44 @@ hyperfacev = [
 			 -20 -20 -20
 			 ]';
 hyperfacev = [
-			 -20  20  20 0;
-			  20  20  20 0;
-			  20 -20  20 0;
-			 -20 -20  20 0;
-			 -20  20 -20 0;
-			  20  20 -20 0;
-			  20 -20 -20 0;
-			 -20 -20 -20 0;
+			 -20  20  20 20;
+			  20  20  20 20;
+			  20 -20  20 20;
+			 -20 -20  20 20;
+			 -20  20 -20 20;
+			  20  20 -20 20;
+			  20 -20 -20 20;
+			 -20 -20 -20 20;
 			 ]';
-hyperfacee = [1 2; 2 3; 3 4; 4 1; 5 6; 6 7; 7 8; 8 5; 1 5; 2 6; 3 7; 4 8];
+hyperfacee = [1 2; 2 3; 3 4; 4 1;
+			  5 6; 6 7; 7 8; 8 5; 
+			  1 5; 2 6; 3 7; 4 8;
+			  ];
+hypercubev = [
+			 -20  20  20 20;
+			  20  20  20 20;
+			  20 -20  20 20;
+			 -20 -20  20 20;
+			 -20  20 -20 20;
+			  20  20 -20 20;
+			  20 -20 -20 20;
+			 -20 -20 -20 20;
+			 -20  20  20 -20;
+			  20  20  20 -20;
+			  20 -20  20 -20;
+			 -20 -20  20 -20;
+			 -20  20 -20 -20;
+			  20  20 -20 -20;
+			  20 -20 -20 -20;
+			 -20 -20 -20 -20
+			 ]';
+hypercubee = [1 2; 2 3; 3 4; 4 1;
+			  5 6; 6 7; 7 8; 8 5; 
+			  1 5; 2 6; 3 7; 4 8;
+			  9 10; 10 11; 11 12; 12 9; 
+			  13 14; 14 15; 15 16; 16 13; 
+			  9 13; 10 14; 11 15; 12 16;
+			  1 9; 2 10; 3 11; 4 12; 5 13; 6 14; 7 15; 8 16];
 
 								#rotate3(hyperface,10,0,0);
 printf("include <coordinates.scad>;\n");
@@ -201,12 +229,18 @@ printf("include <coordinates.scad>;\n");
 # polyhedron(rotate2(hyperface,2), [1 2; 2 3; 3 4; 4 1]);
 #polyhedron(rotate3(hyperfacev,x,y,z), hyperfacee)
 
-#xy = str2num(argv(){1});
-xy = 0;
-yz = 0;
-zx = 0;
-xw = 0;
-yw = 0;
-zw = 0;
-polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),true),hyperfacee);
+xy = str2num(argv(){1});
+yz = str2num(argv(){2});
+zx = str2num(argv(){3});
+xw = str2num(argv(){4});
+yw = str2num(argv(){5});
+zw = str2num(argv(){6});
+#xy = 0;
+#yz = 0;
+#zx = 0;
+#xw = 0;
+#yw = 0;
+#zw = 0;
+#polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),true),hyperfacee);
+polyhedron(project43(rotate4(hypercubev,xy,yz,zx,xw,yw,zw),true),hypercubee);
 #polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),false),hyperfacee);
