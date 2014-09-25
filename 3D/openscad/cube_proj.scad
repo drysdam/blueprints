@@ -3,7 +3,7 @@ include <coordinates.scad>;
 module 4Dto3D(t) {
 	$fn = 20;
 	translate([-t,0,t]) scale(10) {
-//		translate([0, -1.5, -1.5]) rotate([45, 0, 0]) scale([2.1,1.3,.01]) circle(1);
+//		translate([0, 1.5, 1.5]) rotate([45, 0, 0]) scale([2.1,1.3,.01]) circle(1);
 		polyhedron2([
 				[-2/3, 2/3, 2/3],
 				[ 2/3, 2/3, 2/3],
@@ -56,7 +56,7 @@ module 4Dto3D(t) {
 				[6, 14],
 				[7, 15],
 			],
-			.05);
+			.1);
 	}
 
 	translate([t,0,t]) scale(10) {
@@ -113,7 +113,7 @@ module 4Dto3D(t) {
 				[6, 14],
 				[7, 15],
 			],
-			.05);
+			.1);
 	}
 }
 
@@ -144,7 +144,7 @@ module 3Dto2D(t) {
 				[2, 6],
 				[3, 7],
 			],
-			.05);
+			.1);
 	}
 
 	translate([t,0,0]) scale(10) {
@@ -172,9 +172,11 @@ module 3Dto2D(t) {
 				[2, 6],
 				[3, 7],
 			],
-			.05);
+			.1);
 	}
 }
 
-4Dto3D(40);
-3Dto2D(40);
+rotate([t, 0, 0]) {
+	4Dto3D(40);
+	3Dto2D(40);
+}
