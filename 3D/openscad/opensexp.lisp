@@ -1,3 +1,5 @@
+; native OpenSCAD commands
+
 (defun circle (radius)
   (format nil "circle(r=~a);" radius))
 
@@ -32,6 +34,32 @@
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}}" first rest))
 
+(defun polygon (pointlist edgelist)
+  (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
+		  pointlist edgelist))
+
+; DIY OpenSCAD commands
+
+(defun arc (radius from-angle to-angle)
+  (let ((real-to-angle (if (> to-angle from-angle)
+						   to-angle
+						   (+ 360 to-angle))))
+	(polygon
+	 (append '((0 0))
+			 (loop for a from from-angle upto real-to-angle collect
+				  (list (* radius (cosd a)) (* radius (sind a))))
+			 '((0 0)))
+	(loop for p upto (+ (- real-to-angle from-angle) 2) collect p))))
+	
+
+; machinery/helpers
+
+(defun cosd (degrees)
+  (cos (* degrees (/ pi 180))))
+
+(defun sind (degrees)
+  (sin (* degrees (/ pi 180))))
+
 (defun merge-scad (l)
   (reduce 
    (lambda (a b) (concatenate 'string a b))
@@ -59,4 +87,8 @@
 					   (- (random 100) 50)
 					   (sphere 5))
 			result))))
+ "/tmp/blah")
+
+(emit 
+ (cylinder 50 60) 
  "/tmp/blah")
