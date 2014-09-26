@@ -102,7 +102,26 @@
  "/tmp/blah")
 
 (emit 
+ (scad-union 
+  (merge-scad (loop for i upto 30 collect
+				   (translate (random 50) 0 (random 50) 
+							  (sphere (random 5)))))
+  (rotate 0 0 -60 (merge-scad (loop for i upto 30 collect
+								  (translate (random 50) 0 (random 50) 
+											 (sphere (random 5)))))))
+ "/tmp/blah")
+
+(emit 
  (difference
   (cylinder 50 60)
-  (translate 0 0 -10 (linear-extrude 80 (arc 55 0 300))))
+  (translate 0 0 -10 (linear-extrude 80 (arc 55 0 300)))
+  (scad-union 
+   (merge-scad (loop for i upto 50 collect
+					(translate (random 50) 0 (random 50) 
+							   (sphere (random 5)))))
+   (rotate 0 0 -60 (merge-scad (loop for i upto 50 collect
+								   (translate (random 50) 0 (random 50) 
+											  (sphere (random 5))))))))
  "/tmp/blah")
+
+
