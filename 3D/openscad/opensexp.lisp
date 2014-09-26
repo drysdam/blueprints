@@ -29,6 +29,9 @@
 (defun rotate (x y z &rest rest)
   (format nil "rotate([~a,~a,~a]){~{~a~}}" x y z rest))
 
+(defun difference (first &rest rest)
+  (format nil "difference() {~a~{~a~}}" first rest))
+
 (defun merge-scad (l)
   (reduce 
    (lambda (a b) (concatenate 'string a b))
@@ -43,4 +46,17 @@
 						  (translate 0 10 0 
 									 (cube 1 1 1))) 
 				  result))))
+ "/tmp/blah")
+
+(emit
+ (difference
+  (translate -50 -50 -50 
+			 (cube 100 100 100))
+  (let ((result '()))
+	(dotimes (i 50 (merge-scad result))
+	  (push (translate (- (random 100) 50) 
+					   (- (random 100) 50)
+					   (- (random 100) 50)
+					   (sphere 5))
+			result))))
  "/tmp/blah")
