@@ -6,20 +6,24 @@
 (defun cylinder (radius height)
   (format nil "cylinder(r=~a,h=~a);" radius height))
 
-(defun cube (x y z)
-  (format nil "cube([~a,~a,~a]);" x y z))
+(defun cube (x y z &key (center '()))
+  (format nil "cube([~a,~a,~a], center=~:[false~;true~]);" x y z center))
 
 (defun sphere (radius)
   (format nil "sphere(r=~a);" radius))
 
-(defun emit (scad &optional (file *STANDARD-OUTPUT*))
+(defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20))
   (let ((fstr (if (listp scad)
 				  "~{~a~}"
 				  "~a")))
 	(if (eq file *STANDARD-OUTPUT*)
-		(format t fstr scad)
+		(progn
+		  (format t "$fn=~a;" fn)
+		  (format t fstr scad))
 		(with-open-file (s file :direction :output :if-exists :supersede)
-		  (format s fstr scad)))
+		  (progn
+			(format s "$fn=~a;" fn)
+			(format s fstr scad))))
 	't))
 
 (defun scale (x y z &rest rest)
@@ -33,6 +37,9 @@
 
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}}" first rest))
+
+(defun scad-intersection (first &rest rest)
+  (format nil "intersection() {~a~{~a~}}" first rest))
 
 (defun scad-union (&rest rest)
   (format nil "union() {~{~a~}}" rest))
@@ -80,7 +87,7 @@
 						  (translate 0 10 0 
 									 (cube 1 1 1))) 
 				  result))))
- "/tmp/blah")
+ :file "/tmp/blah")
 
 (emit
  (difference
@@ -93,13 +100,13 @@
 					   (- (random 100) 50)
 					   (sphere 5))
 			result))))
- "/tmp/blah")
+ :file "/tmp/blah")
 
 (emit 
  (difference
   (cylinder 50 60)
   (translate 10 0 -10 (cylinder 50 80)))
- "/tmp/blah")
+ :file "/tmp/blah")
 
 (emit 
  (scad-union 
@@ -109,7 +116,7 @@
   (rotate 0 0 -60 (merge-scad (loop for i upto 30 collect
 								  (translate (random 50) 0 (random 50) 
 											 (sphere (random 5)))))))
- "/tmp/blah")
+ :file "/tmp/blah")
 
 (emit 
  (difference
@@ -122,6 +129,10 @@
    (rotate 0 0 -60 (merge-scad (loop for i upto 50 collect
 								   (translate (random 50) 0 (random 50) 
 											  (sphere (random 5))))))))
- "/tmp/blah")
+ :file "/tmp/blah")
 
-
+(emit 
+; (scad-intersection (cube 1 1 1) (sphere .5))
+ (scad-union (cube 5 5 5 :center 't) (sphere 3.5))
+ :file "/tmp/blah"
+ :fn 100)
