@@ -12,20 +12,6 @@
 (defun sphere (radius)
   (format nil "sphere(r=~a);" radius))
 
-(defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20))
-  (let ((fstr (if (listp scad)
-				  "~{~a~}"
-				  "~a")))
-	(if (eq file *STANDARD-OUTPUT*)
-		(progn
-		  (format t "$fn=~a;" fn)
-		  (format t fstr scad))
-		(with-open-file (s file :direction :output :if-exists :supersede)
-		  (progn
-			(format s "$fn=~a;" fn)
-			(format s fstr scad))))
-	't))
-
 (defun scale (x y z &rest rest)
   (format nil "scale([~a,~a,~a]){~{~a~}}" x y z rest))
 
@@ -52,6 +38,20 @@
   		  pointlist edgelist))
 
 ; DIY OpenSCAD commands
+
+(defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20))
+  (let ((fstr (if (listp scad)
+				  "~{~a~}"
+				  "~a")))
+	(if (eq file *STANDARD-OUTPUT*)
+		(progn
+		  (format t "$fn=~a;" fn)
+		  (format t fstr scad))
+		(with-open-file (s file :direction :output :if-exists :supersede)
+		  (progn
+			(format s "$fn=~a;" fn)
+			(format s fstr scad))))
+	't))
 
 (defun arc (radius from-angle to-angle)
   (let ((real-to-angle (if (> to-angle from-angle)
@@ -133,6 +133,7 @@
 
 (emit 
 ; (scad-intersection (cube 1 1 1) (sphere .5))
- (scad-union (cube 5 5 5 :center 't) (sphere 3.5))
+ (scad-union (cube 5 5 5 :center 't) (sphere (* (sqrt 2) 2.5)))
  :file "/tmp/blah"
- :fn 100)
+ :fn 200)
+
