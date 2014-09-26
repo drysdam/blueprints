@@ -34,9 +34,15 @@
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}}" first rest))
 
+(defun scad-union (&rest rest)
+  (format nil "union() {~{~a~}}" rest))
+  
+(defun linear-extrude (height scad)
+  (format nil "linear_extrude(height=~a, convexity=10) {~a}" height scad))
+
 (defun polygon (pointlist edgelist)
   (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
-		  pointlist edgelist))
+  		  pointlist edgelist))
 
 ; DIY OpenSCAD commands
 
@@ -90,5 +96,13 @@
  "/tmp/blah")
 
 (emit 
- (cylinder 50 60) 
+ (difference
+  (cylinder 50 60)
+  (translate 10 0 -10 (cylinder 50 80)))
+ "/tmp/blah")
+
+(emit 
+ (difference
+  (cylinder 50 60)
+  (translate 0 0 -10 (linear-extrude 80 (arc 55 0 300))))
  "/tmp/blah")
