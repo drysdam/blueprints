@@ -39,16 +39,18 @@
 
 ; DIY OpenSCAD commands
 
-(defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20))
+(defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20) (includes '()))
   (let ((fstr (if (listp scad)
 				  "~{~a~}"
 				  "~a")))
 	(if (eq file *STANDARD-OUTPUT*)
 		(progn
+		  (format t "~{include <~a>;~}" includes)
 		  (format t "$fn=~a;" fn)
 		  (format t fstr scad))
 		(with-open-file (s file :direction :output :if-exists :supersede)
 		  (progn
+			(format s "~{include <~a>;~}" includes)
 			(format s "$fn=~a;" fn)
 			(format s fstr scad))))
 	't))
@@ -64,6 +66,8 @@
 			 '((0 0)))
 	(loop for p upto (+ (- real-to-angle from-angle) 2) collect p))))
 	
+(defun line-xyz (xyz1 xyz2 &optional (thickness 3))
+  (format nil "line_xyz([~{~,6f~^,~}],[~{~,6f~^,~}],~a);" xyz1 xyz2 thickness))
 
 ; machinery/helpers
 
@@ -79,6 +83,10 @@
    l))
 
 ; test cases
+(emit 
+ (rotate 45 0 0 (cube 10 10 10))
+ :file "/tmp/blah")
+
 (emit
  (scale .5 .5 .5
 		(let ((result '()))
@@ -137,3 +145,7 @@
  :file "/tmp/blah"
  :fn 200)
 
+(emit
+ (line-xyz '(0 0 0) '(10 10 10) 1)
+ :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad"
+ :includes '("coordinates.scad"))
