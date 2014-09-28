@@ -1,3 +1,23 @@
+(defpackage :scad
+  (:use :common-lisp)
+  (:export 
+   :line-xyz
+   :emit
+   :circle
+   :cylinder
+   :cube
+   :sphere
+   :scale
+   :translate
+   :rotate
+   :difference
+   :scad-intersection
+   :scad-union
+   :linear_extrude
+   :polygon))
+
+(in-package :scad)
+
 ; native OpenSCAD commands
 
 (defun circle (radius)
