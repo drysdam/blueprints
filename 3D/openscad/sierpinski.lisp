@@ -16,8 +16,8 @@
 				(* rad (sin (/ (* 2 2 pi) 3)))
 				newz))))
 
-(defun draw-tetrahedron (tetra)
-  (destructuring-bind (p1 p2 p3 p4) tetra
+(defun draw-tetrahedron (tetrapts)
+  (destructuring-bind (p1 p2 p3 p4) tetrapts
 	(list
 	 (scad:line-xyz p1 p2 *thickness*)
 	 (scad:line-xyz p1 p3 *thickness*)
@@ -26,26 +26,27 @@
 	 (scad:line-xyz p3 p4 *thickness*)
 	 (scad:line-xyz p4 p2 *thickness*))))
 
-(defun outermost-three (tetra)
-  (let ((largest-x (loop for p in tetra
+(defun outermost-three (tetrapts)
+  (let ((largest-x (loop for p in tetrapts
 					  maximize (first p)))
-		(largest-y (loop for p in tetra
+		(largest-y (loop for p in tetrapts
 					  maximize (second p)))
-		(smallest-y (loop for p in tetra
+		(smallest-y (loop for p in tetrapts
 					   minimize (second p))))
-	(loop for p in tetra
+	(loop for p in tetrapts
 	   when (or 
 			 (= (first p) largest-x)
 			 (= (second p) largest-y)
 			 (= (second p) smallest-y))
 	   append (list p))))
 
-(defun place-tetrahedron (tetra points) 
-  (loop for p in points
-	 collecting (scad:translate (first p)
-								(second p)
-								(third p) 
-								tetra)))
+(defun place-tetrahedron (tetradrwn points) 
+  (cons tetradrwn
+		(loop for p in points
+		   collecting (scad:translate (first p)
+									  (second p)
+									  (third p) 
+									  tetradrwn))))
 
 (scad:emit 
  (draw-tetrahedron (make-tetrahedron 0 0 0 100)) 
