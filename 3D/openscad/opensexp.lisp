@@ -14,7 +14,8 @@
    :scad-intersection
    :scad-union
    :linear_extrude
-   :polygon))
+   :polygon
+   :polyhedron))
 
 (in-package :scad)
 
@@ -56,6 +57,10 @@
 (defun polygon (pointlist edgelist)
   (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
   		  pointlist edgelist))
+
+(defun polyhedron (pointlist facelistlist)
+  (format nil "polyhedron([~{[~{~,6f~^,~}]~^,~}], [~{[~{~a~^,~}]~^,~}]);" 
+  		  pointlist facelistlist))
 
 ; DIY OpenSCAD commands
 
@@ -102,6 +107,10 @@
 	  l))
 
 ;; ; test cases
+(emit
+ (polyhedron '((0 0 0) (10 10 10) (10 -10 10)) '((0 1 2)))
+ :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad")
+
 ;; (emit 
 ;;  (rotate 45 0 0 (cube 10 10 10))
 ;;  :file "/tmp/blah")
