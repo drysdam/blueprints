@@ -17,14 +17,7 @@
 				newz))))
 
 (defun draw-tetrahedron (tetrapts)
-  (destructuring-bind (p1 p2 p3 p4) tetrapts
-	(list
-	 (scad:line-xyz p1 p2 *thickness*)
-	 (scad:line-xyz p1 p3 *thickness*)
-	 (scad:line-xyz p1 p4 *thickness*)
-	 (scad:line-xyz p2 p3 *thickness*)
-	 (scad:line-xyz p3 p4 *thickness*)
-	 (scad:line-xyz p4 p2 *thickness*))))
+  (scad:polyhedron tetrapts '((0 1 2) (0 2 3) (0 3 1) (1 2 3))))
 
 (defun outermost-three (tetrapts)
   (let ((largest-x (loop for p in tetrapts
