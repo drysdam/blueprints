@@ -36,7 +36,7 @@
   (format nil "scale([~a,~a,~a]){~{~a~}};" x y z rest))
 
 (defun translate (x y z &rest rest)
-  (format nil "translate([~,6f,~,6f,~,6f]){~{~a~}};" x y z (merge-scad rest)))
+  (format nil "translate([~,6f,~,6f,~,6f]){~a};" x y z (merge-scad rest)))
 
 (defun rotate (x y z &rest rest)
   (format nil "rotate([~a,~a,~a]){~{~a~}};" x y z rest))
@@ -60,20 +60,17 @@
 ; DIY OpenSCAD commands
 
 (defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20) (includes '()))
-  (let ((fstr (if (listp scad)
-				  "~{~a~}"
-				  "~a")))
-	(if (eq file *STANDARD-OUTPUT*)
+  (if (eq file *STANDARD-OUTPUT*)
+	  (progn
+		(format t "~{include <~a>;~}" includes)
+		(format t "$fn=~a;" fn)
+		(format t "~a" (merge-scad scad)))
+	  (with-open-file (s file :direction :output :if-exists :supersede)
 		(progn
-		  (format t "~{include <~a>;~}" includes)
-		  (format t "$fn=~a;" fn)
-		  (format t fstr scad))
-		(with-open-file (s file :direction :output :if-exists :supersede)
-		  (progn
-			(format s "~{include <~a>;~}" includes)
-			(format s "$fn=~a;" fn)
-			(format s fstr scad))))
-	't))
+		  (format s "~{include <~a>;~}" includes)
+		  (format s "$fn=~a;" fn)
+		  (format s "~a" (merge-scad scad)))))
+  't)
 
 (defun arc (radius from-angle to-angle)
   (let ((real-to-angle (if (> to-angle from-angle)
@@ -99,7 +96,9 @@
 
 (defun merge-scad (l)
   (if (listp l)
-	  (reduce (lambda (a b) (concatenate 'string a b)) l)
+	  (reduce 
+	   (lambda (a b) (concatenate 'string a b))
+	   (mapcar #'merge-scad l))
 	  l))
 
 ;; ; test cases
@@ -109,12 +108,10 @@
 
 ;; (emit
 ;;  (scale .5 .5 .5
-;; 		(let ((result '()))
-;; 		  (dotimes (i 3 (merge-scad result))
-;; 			(push (rotate (* i 120) 0 0 
-;; 						  (translate 0 10 0 
-;; 									 (cube 1 1 1))) 
-;; 				  result))))
+;; 		(loop for i upto 3
+;; 		   collecting (rotate (* i 120) 0 0 
+;; 							  (translate 0 10 0 
+;; 										 (cube 1 1 1)))))
 ;;  :file "/tmp/blah")
 
 ;; (emit
