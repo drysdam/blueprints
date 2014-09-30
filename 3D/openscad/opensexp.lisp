@@ -3,6 +3,7 @@
   (:export 
    :line-xyz
    :emit
+   :hull
    :circle
    :cylinder
    :cube
@@ -22,25 +23,25 @@
 ; native OpenSCAD commands
 
 (defun circle (radius)
-  (format nil "circle(r=~a);" radius))
+  (format nil "circle(r=~,6f);" radius))
 
 (defun cylinder (radius height)
-  (format nil "cylinder(r=~a,h=~a);" radius height))
+  (format nil "cylinder(r=~,6f,h=~,6f);" radius height))
 
 (defun cube (x y z &key (center '()))
-  (format nil "cube([~a,~a,~a], center=~:[false~;true~]);" x y z center))
+  (format nil "cube([~,6f,~,6f,~,6f], center=~:[false~;true~]);" x y z center))
 
 (defun sphere (radius)
-  (format nil "sphere(r=~a);" radius))
+  (format nil "sphere(r=~,6f);" radius))
 
 (defun scale (x y z &rest rest)
-  (format nil "scale([~a,~a,~a]){~{~a~}};" x y z rest))
+  (format nil "scale([~,6f,~,6f,~,6f]){~{~a~}};" x y z rest))
 
 (defun translate (x y z &rest rest)
   (format nil "translate([~,6f,~,6f,~,6f]){~a};" x y z (merge-scad rest)))
 
 (defun rotate (x y z &rest rest)
-  (format nil "rotate([~a,~a,~a]){~{~a~}};" x y z rest))
+  (format nil "rotate([~,6f,~,6f,~,6f]){~a};" x y z (merge-scad rest)))
 
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}};" first rest))
@@ -52,7 +53,10 @@
   (format nil "union() {~{~a~}};" rest))
   
 (defun linear-extrude (height scad)
-  (format nil "linear_extrude(height=~a, convexity=10) {~a};" height scad))
+  (format nil "linear_extrude(height=~,6f, convexity=10) {~a};" height scad))
+
+(defun hull (&rest scad)
+  (format nil "hull () {~a};" (merge-scad scad)))
 
 (defun polygon (pointlist edgelist)
   (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
