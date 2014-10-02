@@ -7,7 +7,7 @@
 
 (defun bar (length thickness)
   (scad:translate (/ thickness -2) 0 0 
-			 (scad:hull
+			 (scad:scad-union
 			  (scad:translate 0 0 (/ length 2) 
 							  (scad:rotate 0 90 0 
 										   (scad:cylinder 1 thickness)))
@@ -27,6 +27,9 @@
 							   (bar height width)))))))
 
 (emit (bar 10 2)
+	  :file "möbius.scad")
+
+(emit (loop-de-loop 10 30 50 180)
 	  :file "möbius.scad")
 
 (emit (pairwise-hull (loop-de-loop 10 30 50 180))
