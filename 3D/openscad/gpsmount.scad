@@ -1,19 +1,21 @@
 $fn=100;
 difference() {
 	difference() {
-		translate([0,0,-1.3]) cylinder(r=50.8, h=5);
+		// entire thing will be just 2" wide
+		translate([0,0,-.016*25.4]) cylinder(r=25.4, h=.160*25.4);
 		// disk on the windshield end
-		cylinder(r2=45.6, r1=44.7, h=3.8);
+		// narrow end is 1.765", wide end is 1.795" (diameters)
+		cylinder(r1=1.765*25.4/2, r2=1.795*25.4/2, h=.145*25.4);
 	}
 
-
 	translate([0,0,1]) difference() {
-		cylinder(r=48.51, h=1.9, center=true);
+		// size of "nubs circle"
+		cylinder(r=1.910*25.4/2, h=.075*25.4, center=true);
 		// .750"
-		translate([0,25+19.1,0]) cube([100,50,2], center=true);
-		translate([0,-25-19.1,0]) cube([100,50,2], center=true);
+		translate([0,25+.750*25.4/2,0]) cube([100,50,2], center=true);
+		translate([0,-25-.750*25.4/2,0]) cube([100,50,2], center=true);
 		// .580"
-		translate([50,25+14.7,0]) cube([100,50,2], center=true);
-		translate([50,-25-14.7,0]) cube([100,50,2], center=true);
+		translate([50,25+.580*25.4/2,0]) cube([100,50,2], center=true);
+		translate([50,-25-.580*25.4/2,0]) cube([100,50,2], center=true);
 	}
 }
