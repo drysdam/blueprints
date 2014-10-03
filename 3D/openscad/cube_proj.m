@@ -62,14 +62,14 @@ endfunction
 function pcorners = rotated_3dto2d()
   l = [0 0 2];
   # clockwise starting from the top, front face
-  corners = [0 1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 1/2 0;
-			 0 1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 1/2 0;
-			 0 -1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 -1/2 0;
-			 0 -1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 -1/2 0];
+  corners = [+0          +1/2  +1+sqrt(2)/2;
+			 +sqrt(2)/2  +1/2  +1;
+			 +0          +1/2  +1-sqrt(2)/2;
+			 -sqrt(2)/2  +1/2  +1;
+			 +0          -1/2  +1+sqrt(2)/2;
+			 +sqrt(2)/2  -1/2  +1;
+			 +0          -1/2  +1-sqrt(2)/2;
+			 -sqrt(2)/2  -1/2  +1];
   pcorners = zeros(8,2);
   for p = 1:8
 	v = corners(p,:);
@@ -109,21 +109,21 @@ function pcorners = rotated_4dto3d()
   l = [0 0 0 2];
   # clockwise starting from the top, front face, posi cube
   corners = [0 1/2 1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 1/2 1/2 0;
+			 sqrt(2)/2 1/2 1/2 1;
 			 0 1/2 1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 1/2 1/2 0;
+			 -sqrt(2)/2 1/2 1/2 1;
 			 0 -1/2 1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 -1/2 1/2 0;
+			 sqrt(2)/2 -1/2 1/2 1;
 			 0 -1/2 1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 -1/2 1/2 0;
+			 -sqrt(2)/2 -1/2 1/2 1;
 			 0 1/2 -1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 1/2 -1/2 0;
+			 sqrt(2)/2 1/2 -1/2 1;
 			 0 1/2 -1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 1/2 -1/2 0;
+			 -sqrt(2)/2 1/2 -1/2 1;
 			 0 -1/2 -1/2 1+sqrt(2)/2;
-			 sqrt(2)/2 -1/2 -1/2 0;
+			 sqrt(2)/2 -1/2 -1/2 1;
 			 0 -1/2 -1/2 1-sqrt(2)/2;
-			 -sqrt(2)/2 -1/2 -1/2 0];
+			 -sqrt(2)/2 -1/2 -1/2 1];
   pcorners = zeros(16,3);
   for p = 1:16
 	v = corners(p,:);
@@ -132,9 +132,9 @@ function pcorners = rotated_4dto3d()
   endfor
 endfunction
 
-unrotated_2dto1d()
-rotated_2dto1d()
-unrotated_3dto2d()
-rotated_3dto2d()
-unrotated_4dto3d()
+# unrotated_2dto1d()
+# rotated_2dto1d()
+# unrotated_3dto2d()
+# rotated_3dto2d()
+# unrotated_4dto3d()
 rotated_4dto3d()
