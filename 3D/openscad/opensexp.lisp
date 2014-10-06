@@ -1,3 +1,10 @@
+; todo: 
+;
+; - global *units* so I can use mm or thous (or others) and the right
+;   open openscad comes out
+;
+; - radius/diameter option somehow (macro? keyword?)
+
 (defpackage :scad
   (:use :common-lisp)
   (:export 
