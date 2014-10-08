@@ -9,6 +9,7 @@
   (:use :common-lisp)
   (:export 
    :line-xyz
+   :mill
    :emit
    :hull
    :circle
@@ -99,8 +100,22 @@
 			 '((0 0)))
 	(loop for p upto (+ (- real-to-angle from-angle) 2) collect p))))
 	
-(defun line-xyz (xyz1 xyz2 &optional (thickness 3))
-  (format nil "line_xyz([~{~,6f~^,~}],[~{~,6f~^,~}],~a);" xyz1 xyz2 thickness))
+(defun line-xyz (xyz1 xyz2 &optional (cutter "sphere(3)"))
+  (format nil "hull() {
+                 translate([~{~,6f~^,~}]) ~a;
+		         translate([~{~,6f~^,~}]) ~a;
+ 	           }" xyz1 cutter xyz2 cutter))
+
+; simulate a 3-axis milling machine. if you want to rotate your part,
+; do that yourself between milling operations. also, add the first
+; point again on the end to close the path. also also, the milling
+; cutter isn't spinning, which is actually a feature not a bug. you
+; can "drag" at cube through material and leave a sqrt(2) path if
+; going diagonally. maybe "drag" would be a better name than "mill"...
+(defun mill (pointlist &optional (cutter "sphere(3)")) 
+  (mapcar (lambda (p1 p2) 
+			(scad:line-xyz p1 p2 cutter))
+		  pointlist (cdr pointlist)))
 
 ; machinery/helpers
 
@@ -186,3 +201,7 @@
 ;;  (line-xyz '(0 0 0) '(10 10 10) 1)
 ;;  :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad"
 ;;  :includes '("coordinates.scad"))
+
+(emit 
+ (scad:mill '((0 0 0) (10 10 0) (10 20 0) (0 0 0)) (scad:sphere 3))
+ :file "/tmp/blah")
