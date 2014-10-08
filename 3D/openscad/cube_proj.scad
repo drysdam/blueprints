@@ -130,7 +130,7 @@ module 4Dto3D(t) {
 	//  0.00000  -0.58579  -0.58579
 	// -1.41421  -1.00000  -1.00000
 	translate([t,0,t]) scale(10) {
-	translate([0, -2, -2]) rotate([45, 0, 0]) scale([2*sqrt(2)/2,sqrt(6)/2,.01]) circle(1);
+	translate([-2, 0, 2]) rotate([45, 0, 90]) scale([2,2,.01]) circle(1);
 		polyhedron2([
 				[-(2+sqrt(2)), 0, -(2+sqrt(2))],
 				[+(2+sqrt(2)), 0, -(2+sqrt(2))],
@@ -282,7 +282,7 @@ module 3Dto2D(t) {
 	}
 }
 
-rotate([t, 0, 0]) {
-	4Dto3D(40);
- 	3Dto2D(40);
-}
+// rotate([t, 0, 0]) {
+	4Dto3D(0);
+//  	3Dto2D(40);
+// }
