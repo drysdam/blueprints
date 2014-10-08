@@ -33,13 +33,20 @@
 			 (= (second p) smallest-y))
 	   append (list p))))
 
-(defun place-tetrahedron (tetradrwn points) 
-  (cons tetradrwn
+(defun add-to-all (v vectorlist) 
+  (mapcar (lambda (v2) (mapcar #'+ v v2)) vectorlist))
+
+(defun place-tetrahedron (tetrapts points) 
+  (cons tetrapts
 		(loop for p in points
-		   collecting (scad:translate (first p)
-									  (second p)
-									  (third p) 
-									  tetradrwn))))
+		   collecting (add-to-all p tetrapts))))
+
+(defun sierpinski (tetrapts depth)
+  (if (zerop depth) 
+	  tetrapts
+	  (sierpinski (place-tetrahedron tetrapts (outermost-three tetrapts))
+				  (- depth 1))))
+		
 
 (scad:emit 
  (draw-tetrahedron (make-tetrahedron 0 0 0 100)) 
@@ -52,3 +59,5 @@
 					 (make-tetrahedron 0 0 0 100)))
  :includes '("coordinates.scad")
  :file "sierpinski.scad")
+
+
