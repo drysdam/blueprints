@@ -1,8 +1,16 @@
+; todo: 
+;
+; - global *units* so I can use mm or thous (or others) and the right
+;   open openscad comes out
+;
+; - radius/diameter option somehow (macro? keyword?)
+
 (defpackage :scad
   (:use :common-lisp)
   (:export 
    :line-xyz
    :emit
+   :hull
    :circle
    :cylinder
    :cube
@@ -14,32 +22,33 @@
    :scad-intersection
    :scad-union
    :linear_extrude
-   :polygon))
+   :polygon
+   :polyhedron))
 
 (in-package :scad)
 
 ; native OpenSCAD commands
 
 (defun circle (radius)
-  (format nil "circle(r=~a);" radius))
+  (format nil "circle(r=~,6f);" radius))
 
 (defun cylinder (radius height)
-  (format nil "cylinder(r=~a,h=~a);" radius height))
+  (format nil "cylinder(r=~,6f,h=~,6f);" radius height))
 
 (defun cube (x y z &key (center '()))
-  (format nil "cube([~a,~a,~a], center=~:[false~;true~]);" x y z center))
+  (format nil "cube([~,6f,~,6f,~,6f], center=~:[false~;true~]);" x y z center))
 
 (defun sphere (radius)
-  (format nil "sphere(r=~a);" radius))
+  (format nil "sphere(r=~,6f);" radius))
 
 (defun scale (x y z &rest rest)
-  (format nil "scale([~a,~a,~a]){~{~a~}};" x y z rest))
+  (format nil "scale([~,6f,~,6f,~,6f]){~{~a~}};" x y z rest))
 
 (defun translate (x y z &rest rest)
-  (format nil "translate([~,6f,~,6f,~,6f]){~{~a~}};" x y z (merge-scad rest)))
+  (format nil "translate([~,6f,~,6f,~,6f]){~a};" x y z (merge-scad rest)))
 
 (defun rotate (x y z &rest rest)
-  (format nil "rotate([~a,~a,~a]){~{~a~}};" x y z rest))
+  (format nil "rotate([~,6f,~,6f,~,6f]){~a};" x y z (merge-scad rest)))
 
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}};" first rest))
@@ -51,29 +60,33 @@
   (format nil "union() {~{~a~}};" rest))
   
 (defun linear-extrude (height scad)
-  (format nil "linear_extrude(height=~a, convexity=10) {~a};" height scad))
+  (format nil "linear_extrude(height=~,6f, convexity=10) {~a};" height scad))
+
+(defun hull (&rest scad)
+  (format nil "hull () {~a};" (merge-scad scad)))
 
 (defun polygon (pointlist edgelist)
   (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
   		  pointlist edgelist))
 
+(defun polyhedron (pointlist facelistlist)
+  (format nil "polyhedron([~{[~{~,6f~^,~}]~^,~}], [~{[~{~a~^,~}]~^,~}]);" 
+  		  pointlist facelistlist))
+
 ; DIY OpenSCAD commands
 
 (defun emit (scad &key (file *STANDARD-OUTPUT*) (fn 20) (includes '()))
-  (let ((fstr (if (listp scad)
-				  "~{~a~}"
-				  "~a")))
-	(if (eq file *STANDARD-OUTPUT*)
+  (if (eq file *STANDARD-OUTPUT*)
+	  (progn
+		(format t "~{include <~a>;~}" includes)
+		(format t "$fn=~a;" fn)
+		(format t "~a" (merge-scad scad)))
+	  (with-open-file (s file :direction :output :if-exists :supersede)
 		(progn
-		  (format t "~{include <~a>;~}" includes)
-		  (format t "$fn=~a;" fn)
-		  (format t fstr scad))
-		(with-open-file (s file :direction :output :if-exists :supersede)
-		  (progn
-			(format s "~{include <~a>;~}" includes)
-			(format s "$fn=~a;" fn)
-			(format s fstr scad))))
-	't))
+		  (format s "~{include <~a>;~}" includes)
+		  (format s "$fn=~a;" fn)
+		  (format s "~a" (merge-scad scad)))))
+  't)
 
 (defun arc (radius from-angle to-angle)
   (let ((real-to-angle (if (> to-angle from-angle)
@@ -99,22 +112,26 @@
 
 (defun merge-scad (l)
   (if (listp l)
-	  (reduce (lambda (a b) (concatenate 'string a b)) l)
+	  (reduce 
+	   (lambda (a b) (concatenate 'string a b))
+	   (mapcar #'merge-scad l))
 	  l))
 
 ;; ; test cases
+(emit
+ (polyhedron '((0 0 0) (10 10 10) (10 -10 10)) '((0 1 2)))
+ :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad")
+
 ;; (emit 
 ;;  (rotate 45 0 0 (cube 10 10 10))
 ;;  :file "/tmp/blah")
 
 ;; (emit
 ;;  (scale .5 .5 .5
-;; 		(let ((result '()))
-;; 		  (dotimes (i 3 (merge-scad result))
-;; 			(push (rotate (* i 120) 0 0 
-;; 						  (translate 0 10 0 
-;; 									 (cube 1 1 1))) 
-;; 				  result))))
+;; 		(loop for i upto 3
+;; 		   collecting (rotate (* i 120) 0 0 
+;; 							  (translate 0 10 0 
+;; 										 (cube 1 1 1)))))
 ;;  :file "/tmp/blah")
 
 ;; (emit

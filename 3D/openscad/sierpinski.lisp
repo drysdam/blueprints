@@ -16,36 +16,37 @@
 				(* rad (sin (/ (* 2 2 pi) 3)))
 				newz))))
 
-(defun draw-tetrahedron (tetra)
-  (destructuring-bind (p1 p2 p3 p4) tetra
-	(list
-	 (scad:line-xyz p1 p2 *thickness*)
-	 (scad:line-xyz p1 p3 *thickness*)
-	 (scad:line-xyz p1 p4 *thickness*)
-	 (scad:line-xyz p2 p3 *thickness*)
-	 (scad:line-xyz p3 p4 *thickness*)
-	 (scad:line-xyz p4 p2 *thickness*))))
+(defun draw-tetrahedron (tetrapts)
+  (scad:polyhedron tetrapts '((0 1 2) (0 2 3) (0 3 1) (1 2 3))))
 
-(defun outermost-three (tetra)
-  (let ((largest-x (loop for p in tetra
+(defun outermost-three (tetrapts)
+  (let ((largest-x (loop for p in tetrapts
 					  maximize (first p)))
-		(largest-y (loop for p in tetra
+		(largest-y (loop for p in tetrapts
 					  maximize (second p)))
-		(smallest-y (loop for p in tetra
+		(smallest-y (loop for p in tetrapts
 					   minimize (second p))))
-	(loop for p in tetra
+	(loop for p in tetrapts
 	   when (or 
 			 (= (first p) largest-x)
 			 (= (second p) largest-y)
 			 (= (second p) smallest-y))
 	   append (list p))))
 
-(defun place-tetrahedron (tetra points) 
-  (loop for p in points
-	 collecting (scad:translate (first p)
-								(second p)
-								(third p) 
-								tetra)))
+(defun add-to-all (v vectorlist) 
+  (mapcar (lambda (v2) (mapcar #'+ v v2)) vectorlist))
+
+(defun place-tetrahedron (tetrapts points) 
+  (cons tetrapts
+		(loop for p in points
+		   collecting (add-to-all p tetrapts))))
+
+(defun sierpinski (tetrapts depth)
+  (if (zerop depth) 
+	  tetrapts
+	  (sierpinski (place-tetrahedron tetrapts (outermost-three tetrapts))
+				  (- depth 1))))
+		
 
 (scad:emit 
  (draw-tetrahedron (make-tetrahedron 0 0 0 100)) 
@@ -58,3 +59,5 @@
 					 (make-tetrahedron 0 0 0 100)))
  :includes '("coordinates.scad")
  :file "sierpinski.scad")
+
+
