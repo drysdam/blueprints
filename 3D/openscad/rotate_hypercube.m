@@ -128,7 +128,7 @@ function result = project43(vertices, perspective)
   from = [0 0 0 100]';
   to = [0 0 0 0]';
   up = [0 0 1 0]';
-  over = [0 1 1 1]'; # ???
+  over = [1 0 0 0]'; # ???
 
   D = (to - from);
   D /= vecmag(D);
@@ -229,18 +229,18 @@ printf("include <coordinates.scad>;\n");
 # polyhedron(rotate2(hyperface,2), [1 2; 2 3; 3 4; 4 1]);
 #polyhedron(rotate3(hyperfacev,x,y,z), hyperfacee)
 
-xy = str2num(argv(){1});
-yz = str2num(argv(){2});
-zx = str2num(argv(){3});
-xw = str2num(argv(){4});
-yw = str2num(argv(){5});
-zw = str2num(argv(){6});
-#xy = 0;
-#yz = 0;
-#zx = 0;
-#xw = 0;
-#yw = 0;
-#zw = 0;
+# xy = str2num(argv(){1});
+# yz = str2num(argv(){2});
+# zx = str2num(argv(){3});
+# xw = str2num(argv(){4});
+# yw = str2num(argv(){5});
+# zw = str2num(argv(){6});
+xy = 0;
+yz = 0;
+zx = 0;
+xw = 0;
+yw = 0;
+zw = 0;
 #polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),true),hyperfacee);
 polyhedron(project43(rotate4(hypercubev,xy,yz,zx,xw,yw,zw),true),hypercubee);
 #polyhedron(project43(rotate4(hyperfacev,xy,yz,zx,xw,yw,zw),false),hyperfacee);
