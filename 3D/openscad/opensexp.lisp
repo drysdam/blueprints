@@ -4,12 +4,17 @@
 ;   open openscad comes out
 ;
 ; - radius/diameter option somehow (macro? keyword?)
+;
+; - some kind of binding (in code, like with the -*-thing-*- decorator
+; - syntax?) that auto-executes a buffer when saved. would also need
+; - to be non-verbose about errors, probably.
 
 (defpackage :scad
   (:use :common-lisp)
   (:export 
    :line-xyz
    :mill
+   :arc
    :emit
    :hull
    :circle
@@ -22,7 +27,7 @@
    :difference
    :scad-intersection
    :scad-union
-   :linear_extrude
+   :linear-extrude
    :polygon
    :polyhedron))
 
@@ -58,7 +63,7 @@
   (format nil "intersection() {~a~{~a~}};" first rest))
 
 (defun scad-union (&rest rest)
-  (format nil "union() {~{~a~}};" rest))
+  (format nil "union() {~a};" (merge-scad rest)))
   
 (defun linear-extrude (height scad)
   (format nil "linear_extrude(height=~,6f, convexity=10) {~a};" height scad))
