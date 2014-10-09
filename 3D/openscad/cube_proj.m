@@ -145,7 +145,7 @@ endfunction
 function pcorners = project(l, corners)
   dims=length(l);
   ccount=2^dims;
-  pcorners = zeros(ccount,dims);
+  pcorners = zeros(ccount,dims-1);
   for p = 1:ccount
 	v = corners(p,:);
 	proj = abs(norm(l)^2/(dot(v-l,l))) * (v-l);
@@ -161,7 +161,35 @@ endfunction
 function c = makecube(dims, centerheight, rotated)
   ccount=2^dims;
   c = zeros(ccount, dims);
-  middle = 1/2 * ones(ccount, dims-2);
+  if !rotated
+	c = [ 1/2 centerheight+1/2
+		  1/2 centerheight-1/2
+		 -1/2 centerheight-1/2
+		 -1/2 centerheight+1/2;];
+  else 
+	c = [0          centerheight+sqrt(2)/2;
+		 sqrt(2)/2  centerheight;
+		 0          centerheight-sqrt(2)/2;
+		 -sqrt(2)/2 centerheight]; 
+  endif
+  for d=1:dims-2
+	[rows cols] = size(c);
+	newhalfcol = 1/2*ones(rows,1);
+	c = [c(:,1:cols-1) newhalfcol c(:,cols);
+		 c(:,1:cols-1) -newhalfcol c(:,cols);		   ]
+  endfor
 endfunction
 
-makecube(3, 1, false)
+dims = 4;
+rotated = true;
+david = true;
+if david
+  lightheight = 2;
+  cubecenterheight = 1;
+else
+  lightheight = 3;
+  cubecenterheight = 3/2;
+endif
+l = makelight(dims, lightheight);
+c = makecube(dims, cubecenterheight, rotated);
+project(l, c)
