@@ -5,9 +5,11 @@
 ;
 ; - radius/diameter option somehow (macro? keyword?)
 ;
-; - some kind of binding (in code, like with the -*-thing-*- decorator
-; - syntax?) that auto-executes a buffer when saved. would also need
-; - to be non-verbose about errors, probably.
+;; to enable "live-coding:, do this, but with only two ;s: 
+;;;;;;;; Local Variables:
+;;;;;;;; eval: (slime-eval-on-save)
+;;;;;;;; End:
+;; that's not a slime function, but my own
 
 (defpackage :scad
   (:use :common-lisp)
