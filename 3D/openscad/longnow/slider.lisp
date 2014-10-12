@@ -9,13 +9,14 @@
 (defvar *cutter-depth* .250)
 (defvar *cutter* (scad:cylinder *cutter-radius* *cutter-depth*))
 (defvar *backplate-thickness* .250)
+(defvar *diff-depth-bump* .02)
 
 ;; define the shape in relative terms, then scale it to be
 ;; absolute. the only problem is the relative width/depth of the
 ;; cutter.
 (defun slider ()
   (scad:difference
-   (scad:translate 0 -.5 (* -1 (+ *backplate-thickness* .01))
+   (scad:translate 0 -.5 (* -1 (+ *backplate-thickness* *diff-depth-bump*))
 				   (scad:cube 23 7 (+ *backplate-thickness* *cutter-depth*)))
    (scad:translate 10 -1 0 (scad:cube 6 8 *cutter-depth*))
    (scad:translate 0 *cutter-radius* 0
@@ -38,7 +39,7 @@
 
 (defun carry-top ()
   (scad:difference
-   (scad:translate 0 -.5 (* -1 (+ *backplate-thickness* .01))
+   (scad:translate 0 -.5 (* -1 (+ *backplate-thickness* *diff-depth-bump*))
 				   (scad:cube 17 15 (+ *backplate-thickness* *cutter-depth*)))
    (scad:translate 6 -1 0 (scad:cube 6 17 *cutter-depth*))
    (scad:translate 0 *cutter-radius* 0 
@@ -81,7 +82,7 @@
 
 (defun carry-bottom ()
   (scad:difference
-   (scad:translate 6 -21 (* -1 (+ *backplate-thickness* .01))
+   (scad:translate 6 -21 (* -1 (+ *backplate-thickness* *diff-depth-bump*))
 				   (scad:cube 17 21 (+ *backplate-thickness* *cutter-depth*)))
    (scad:translate 0 *cutter-radius* 0 
 				   (scad:mill '((6 -21)
