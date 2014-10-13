@@ -5,7 +5,10 @@
 ;
 ; - radius/diameter option somehow (macro? keyword?)
 ;
-;; to enable "live-coding:, do this, but with only two ;s: 
+; - move some helpers, like (cosd) and (sind) into a more general
+; - location for ALL lisp program, not just opensexp ones
+;; to enable "live-coding:, do this, but with only two ;s, at the end
+;; of the file:
 ;;;;;;;; Local Variables:
 ;;;;;;;; eval: (slime-eval-on-save)
 ;;;;;;;; End:
@@ -14,6 +17,8 @@
 (defpackage :scad
   (:use :common-lisp)
   (:export 
+   :cosd
+   :sind
    :line-xyz
    :mill
    :arc
