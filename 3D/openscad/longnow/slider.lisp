@@ -1,7 +1,4 @@
-;; Local Variables:
-;; eval: (slime-eval-on-save)
-;; End:
-(load "../opensexp.lisp")
+(load "~/software/blueprints/3D/openscad/opensexp.lisp")
 
 ; TODO: need to adjust these so when scaled up to inches later, they
 ; are right...
@@ -124,12 +121,26 @@
    (carry-top)
    (carry-bottom)))
 
-(scad:emit
- (slider)
- :file "/home/dr/software/blueprints/3D/openscad/longnow/slider.scad"
- :fn 20)
+(defun carry-slider () 
+  (scad:scad-union
+   (carry)
+   (scad:translate 0 15 1 (scad:rotate 180 0 0 (slider)))))
+
+;; (scad:emit
+;;  (slider)
+;;  :file "/home/dr/software/blueprints/3D/openscad/longnow/slider.scad"
+;;  :fn 20)
+
+;; (scad:emit
+;;  (carry)
+;;  :file "/home/dr/software/blueprints/3D/openscad/longnow/carry.scad"
+;;  :fn 20)
 
 (scad:emit
- (carry)
- :file "/home/dr/software/blueprints/3D/openscad/longnow/carry.scad"
+ (carry-slider)
+ :file "/home/dr/software/blueprints/3D/openscad/longnow/carry-slider.scad"
  :fn 20)
+
+;; Local Variables:
+;; eval: (slime-eval-on-save)
+;; End:
