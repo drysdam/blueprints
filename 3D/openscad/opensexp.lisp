@@ -45,8 +45,9 @@
 (defun circle (radius)
   (format nil "circle(r=~,6f);" radius))
 
-(defun cylinder (radius height)
-  (format nil "cylinder(r=~,6f,h=~,6f);" radius height))
+(defun cylinder (radius height &key (center '()))
+  (format nil "cylinder(r=~,6f,h=~,6f, center=~:[false~;true~]);" 
+		  radius height center))
 
 (defun cube (x y z &key (center '()))
   (format nil "cube([~,6f,~,6f,~,6f], center=~:[false~;true~]);" x y z center))
