@@ -20,6 +20,7 @@
    :cosd
    :sind
    :line-xyz
+   :pairwise-line
    :mill
    :arc
    :emit
@@ -118,6 +119,13 @@
                  translate([~{~,6f~^,~}]) ~a;
 		         translate([~{~,6f~^,~}]) ~a;
  	           }" xyz1 cutter xyz2 cutter))
+
+(defun pairwise-line (lst &optional (cutter "sphere(3)"))
+  (let ((lst1 lst)
+		(lst2 (append (cdr lst) (list (car lst)))))
+	(mapcar (lambda (p1 p2)
+			  (scad:line-xyz p1 p2 cutter))
+			lst1 lst2)))
 
 ; simulate a 3-axis milling machine. if you want to rotate your part,
 ; do that yourself between milling operations. also, add the first
