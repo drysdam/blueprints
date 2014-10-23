@@ -68,8 +68,8 @@
 (defun difference (first &rest rest)
   (format nil "difference() {~a~{~a~}};" first rest))
 
-(defun scad-intersection (first &rest rest)
-  (format nil "intersection() {~a~{~a~}};" first rest))
+(defun scad-intersection (&rest rest)
+  (format nil "intersection() {~a};" (merge-scad rest)))
 
 (defun scad-union (&rest rest)
   (format nil "union() {~a};" (merge-scad rest)))
