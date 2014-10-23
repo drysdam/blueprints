@@ -10,6 +10,7 @@
 (defparameter *center-to-edge-ext* (+ (/ *thickness* 2) *center-to-edge*))
 (defparameter *hinge-pin-radius* (/ *thickness* 4))
 (defparameter *hinge-pin-length* (* *hinge-width* 2))
+(defparameter *triangle-center-distance* (* -2 *center-to-edge-ext*))
 
 (defun hinge-pin ()
   (scad:rotate 90 0 0 (scad:cylinder *hinge-pin-radius* *hinge-pin-length*)))
@@ -55,11 +56,17 @@
 								 (/ *hinge-pin-length* 2) 
 								 0 
 								 (hinge-pin))))
-		   (hinge-pin-holes (rotcopy (scad:translate 
-									  (- (- *center-to-edge* (/ *hinge-embed* 2))) 
-									  (/ *hinge-pin-length* 2) 
-									  0 
-									  (scad:scale 1.1 1 1.1 (hinge-pin))))))
+		   (hinge-pin-holes (scad:scad-union
+							 (rotcopy (scad:translate 
+									   (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+									   (/ *hinge-pin-length* 2) 
+									   0 
+									   (scad:scale 1.1 1 1.1 (hinge-pin))))
+							 (rotcopy (scad:translate 
+									   (- (+ *center-to-edge* (* 3/2 *hinge-embed*)))
+									   (/ *hinge-pin-length* 2) 
+									   0 
+									   (scad:scale 1.1 1 1.1 (hinge-pin)))))))
 	(scad:scad-union 
 	 hinge-pins
 	 (scad:difference
@@ -68,10 +75,14 @@
 	 (scad:difference
 	  (triangle)
 	  hinge-slots
-	  hinge-pin-holes)))))
+	  hinge-pin-holes))
+	)))
 
 (scad:emit
-  (hinged-triangle '(1))
+ (scad:scad-union
+  (hinged-triangle '(0))
+  (scad:translate *triangle-center-distance* 0 0
+  				  (scad:rotate 0 0 180 (hinged-triangle '(0)))))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
