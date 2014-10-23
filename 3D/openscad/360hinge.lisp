@@ -39,7 +39,38 @@
 	 (scad:pairwise-line corners
 						 (scad:sphere (/ *thickness* 2))))))
 
-(defun hinged-triangle ()
+(defun notched-triangle (sides)
+  ;; would like to apply these things just once, but the
+  ;; scaling-for-clearance has to happen before the translation. again
+  ;; arguing for a datastructure that has both the string AND the real
+  ;; coordinates
+  (let* ((hinge (scad:translate (- *center-to-edge-ext*) 0 0 (hinge)))
+		 (hinge-slots
+		  (scad:scad-union
+		   (loop for i in sides collecting
+				(scad:rotate 0 0 (* i 120)
+							 (scad:translate (- *center-to-edge-ext*) 0 0 
+											 (scad:scale 1.1 1.05 2 (hinge)))))))
+		 (hinge-pin (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+									(/ *hinge-pin-length* 2) 
+									0 
+									(hinge-pin)))
+		 (hinge-pin-holes
+		  (scad:scad-union
+		   (loop for i in sides collecting
+				(scad:rotate 0 0 (* i 120)
+							 (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+											 (/ *hinge-pin-length* 2) 
+											 0 
+											 (scad:scale 1.1 1 1.1 (hinge-pin)))))))
+		 (thing (loop for i in sides collecting
+					 (scad:rotate 0 0 (* i 120) "blah"))))
+	 (scad:difference
+	  (triangle)
+	  hinge-slots
+	  hinge-pin-holes)))
+
+(defun add-hinges (triangle sides)
   ;; would like to apply these things just once, but the
   ;; scaling-for-clearance has to happen before the translation. again
   ;; arguing for a datastructure that has both the string AND the real
@@ -54,7 +85,9 @@
 		 (hinge-pin-hole (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
 									(/ *hinge-pin-length* 2) 
 									0 
-									(scad:scale 1.1 1 1.1 (hinge-pin)))))
+									(scad:scale 1.1 1 1.1 (hinge-pin))))
+		 (thing (loop for i in sides collecting
+					 (scad:rotate 0 0 (* i 120) "blah"))))
 	(scad:scad-union 
 	 hinge-pin
 	 (scad:difference
@@ -63,11 +96,10 @@
 	 (scad:difference
 	  (triangle)
 	  hinge-slot
-	  hinge-pin-hole)
-	 )))
+	  hinge-pin-hole))))
 
 (scad:emit
-  (hinged-triangle)
+  (notched-triangle '(0 1 2))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
