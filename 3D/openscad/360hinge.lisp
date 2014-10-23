@@ -44,34 +44,22 @@
   ;; scaling-for-clearance has to happen before the translation. again
   ;; arguing for a datastructure that has both the string AND the real
   ;; coordinates
-  (let* ((hinges 
-		  (scad:scad-union
-		   (loop for i in sides collecting
-				(scad:rotate 0 0 (* i 120)
-							 (scad:translate (- *center-to-edge-ext*) 0 0 (hinge))))))
-		 (hinge-slots
-		  (scad:scad-union
-		   (loop for i in sides collecting
-				(scad:rotate 0 0 (* i 120)
-							 (scad:translate (- *center-to-edge-ext*) 0 0 
-											 (scad:scale 1.1 1.05 2 (hinge)))))))
-		 (hinge-pins 
-		  (loop for i in sides collecting
-			   (scad:rotate 0 0 (* i 120)
-							(scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
-											(/ *hinge-pin-length* 2) 
-											0 
-											(hinge-pin)))))
-		 (hinge-pin-holes
-		  (scad:scad-union
-		   (loop for i in sides collecting
-				(scad:rotate 0 0 (* i 120)
-							 (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
-											 (/ *hinge-pin-length* 2) 
-											 0 
-											 (scad:scale 1.1 1 1.1 (hinge-pin)))))))
-		 (thing (loop for i in sides collecting
-					 (scad:rotate 0 0 (* i 120) "blah"))))
+  (flet ((rotcopy (x) (scad:scad-union (loop for i in sides collecting
+											(scad:rotate 0 0 (* i 120)
+														 x)))))
+	(let* ((hinges (rotcopy (scad:translate (- *center-to-edge-ext*) 0 0 (hinge))))
+		   (hinge-slots (rotcopy (scad:translate (- *center-to-edge-ext*) 0 0 
+												 (scad:scale 1.1 1.05 2 (hinge)))))
+		   (hinge-pins (rotcopy (scad:translate 
+								 (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+								 (/ *hinge-pin-length* 2) 
+								 0 
+								 (hinge-pin))))
+		   (hinge-pin-holes (rotcopy (scad:translate 
+									  (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+									  (/ *hinge-pin-length* 2) 
+									  0 
+									  (scad:scale 1.1 1 1.1 (hinge-pin))))))
 	(scad:scad-union 
 	 hinge-pins
 	 (scad:difference
@@ -80,10 +68,10 @@
 	 (scad:difference
 	  (triangle)
 	  hinge-slots
-	  hinge-pin-holes))))
+	  hinge-pin-holes)))))
 
 (scad:emit
-  (hinged-triangle '(0 1 2))
+  (hinged-triangle '(1))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
