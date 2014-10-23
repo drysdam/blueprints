@@ -40,19 +40,31 @@
 						 (scad:sphere (/ *thickness* 2))))))
 
 (defun hinged-triangle ()
+  ;; would like to apply these things just once, but the
+  ;; scaling-for-clearance has to happen before the translation. again
+  ;; arguing for a datastructure that has both the string AND the real
+  ;; coordinates
   (let* ((hinge (scad:translate (- *center-to-edge-ext*) 0 0 (hinge)))
 		 (hinge-slot (scad:translate (- *center-to-edge-ext*) 0 0 
 									 (scad:scale 1.1 1.05 2 (hinge))))
 		 (hinge-pin (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
 									(/ *hinge-pin-length* 2) 
 									0 
-									(hinge-pin))))
+									(hinge-pin)))
+		 (hinge-pin-hole (scad:translate (- (- *center-to-edge* (/ *hinge-embed* 2))) 
+									(/ *hinge-pin-length* 2) 
+									0 
+									(scad:scale 1.1 1 1.1 (hinge-pin)))))
 	(scad:scad-union 
-	 hinge
 	 hinge-pin
 	 (scad:difference
+	  hinge
+	  hinge-pin-hole)
+	 (scad:difference
 	  (triangle)
-	  hinge-slot))))
+	  hinge-slot
+	  hinge-pin-hole)
+	 )))
 
 (scad:emit
   (hinged-triangle)
