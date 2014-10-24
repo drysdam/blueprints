@@ -27,18 +27,22 @@
 (defun triangle ()
 ; since I'm making my triangle by "radiating from the center" one
 ; unit, I need to scale by something to get the right side length
-  (let* ((corners (loop for i from 0 to 2 
-					 collecting (list (* *center-to-corner* (scad:cosd (* i 120)))
-									  (* *center-to-corner* (scad:sind (* i 120)))
-									  0))))
-	(scad:scad-union
-	 (scad:scale 1 1 *thickness*
-				 (scad:polygon (mapcar
-								(lambda (corner)
-								  (list (car corner) (cadr corner)))
-								corners) '(0 1 2 0)))
-	 (scad:pairwise-line corners
-						 (scad:sphere (/ *thickness* 2))))))
+  (let* ((corner-locs (loop for i from 0 to 2 
+						 collecting (list (* *center-to-corner* 
+											 (scad:cosd (* i 120)))
+										  (* *center-to-corner* 
+											 (scad:sind (* i 120)))
+										  0)))
+		 (sphere (scad:sphere (/ *thickness* 2))))
+	(scad:hull
+	 ;; pretty sure there's some way to split a list or apply a
+	 ;; function without doing this explicit deal
+	 (mapcar (lambda (corner)
+			   (scad:translate (first corner)
+							   (second corner)
+							   (third corner)
+							   sphere))
+			 corner-locs))))
 
 (defun hinged-triangle (sides)
   ;; would like to apply these things just once, but the
