@@ -8,48 +8,59 @@
 (defparameter *center-to-edge* (/ *center-to-corner* 2))
 (defparameter *center-to-corner-ext* (+ (/ *thickness* 2) *center-to-corner*))
 (defparameter *center-to-edge-ext* (+ (/ *thickness* 2) *center-to-edge*))
-(defparameter *hinge-pin-radius* (/ *thickness* 4))
-(defparameter *hinge-pin-length* (/ *hinge-width* 8))
+(defparameter *hinge-pin-radius* (/ *thickness* 3.5))
+(defparameter *hinge-pin-length* (* 1.1 *hinge-width*))
 (defparameter *triangle-center-distance* (* -2 *center-to-edge-ext*))
 
 (defun hinge-pin ()
   (scad:rotate
-   90 0 0
-   (scad:translate 
-	(- *hinge-embed* (/ *thickness* 2)) 
-	0 
-	(- (/ *hinge-width* 2) (* .1 *hinge-pin-length*))
-	(scad:cylinder *hinge-pin-radius* (* 1.1 *hinge-pin-length*) :r2 0))
-   (scad:translate 
-	(- *hinge-embed* (/ *thickness* 2)) 
-	0 
-	(- (/ *hinge-width* -2) *hinge-pin-length*)
-	(scad:cylinder 0 (* 1.1 *hinge-pin-length*) :r2 *hinge-pin-radius*))))
+   90 0 0 
+	 (scad:cylinder *hinge-pin-radius* (* 1.1 *hinge-pin-length*) :center 't)))
 
-(defun hinge ()
-  (scad:rotate 
-   90 0 0
-	(scad:hull
-	 (scad:translate 
-	  (- (- *hinge-embed* (/ *thickness* 2))) 
-	  0 
-	  (/ *hinge-width* -2)
-	  (scad:cylinder (/ *thickness* 2) *hinge-width*))
-	 (scad:translate 
-	  (- *hinge-embed* (/ *thickness* 2)) 
-	  0 
-	  (/ *hinge-width* -2)
-	  (scad:cylinder (/ *thickness* 2) *hinge-width*)))))
+(defun hinge (with-holes)
+  (let ((basic-hinge
+		 (scad:rotate 
+		  90 0 0
+		  (scad:hull
+		   (scad:translate 
+			(- (- *hinge-embed* (/ *thickness* 2))) 
+			0 
+			(/ *hinge-width* -2)
+			(scad:cylinder (/ *thickness* 2) *hinge-width*))
+		   (scad:translate 
+			(- *hinge-embed* (/ *thickness* 2)) 
+			0 
+			(/ *hinge-width* -2)
+			(scad:cylinder (/ *thickness* 2) *hinge-width*))))))
+	(if with-holes
+		 (scad:difference
+		  basic-hinge
+		  (scad:translate 
+		   (- *hinge-embed* (/ *thickness* 2)) 0 0 
+		   (scad:scale 1.1 1.1 1.1 (hinge-pin)))
+		  (scad:translate 
+		   (- (- *hinge-embed* (/ *thickness* 2))) 0 0 
+		   (scad:scale 1.1 1.1 1.1 (hinge-pin)))
+		  (scad:translate 
+		   *hinge-embed* 0 0
+		   (scad:cube 
+			5 (* 2 *hinge-width*) (* 1.5 *hinge-pin-radius*) :center 't))
+		  (scad:translate 
+		   (- *hinge-embed*) 0 0
+		   (scad:cube 
+			5 (* 2 *hinge-width*) (* 1.5 *hinge-pin-radius*) :center 't)))
+		basic-hinge)))
 
 (defun triangle ()
 ; since I'm making my triangle by "radiating from the center" one
 ; unit, I need to scale by something to get the right side length
-  (let* ((corner-locs (loop for i from 0 to 2 
-						 collecting (list (* *center-to-corner* 
-											 (scad:cosd (* i 120)))
-										  (* *center-to-corner* 
-											 (scad:sind (* i 120)))
-										  0)))
+  (let* ((corner-locs 
+		  (loop for i from 0 to 2 
+			 collecting (list (* *center-to-corner* 
+								 (scad:cosd (* i 120)))
+							  (* *center-to-corner* 
+								 (scad:sind (* i 120)))
+							  0)))
 		 (sphere (scad:sphere (/ *thickness* 2))))
 	(scad:hull
 	 ;; pretty sure there's some way to split a list or apply a
@@ -76,38 +87,22 @@
 					   (loop for i in sides collecting
 							(scad:rotate 0 0 (* i 120)
 										 x)))))
-	(let* ((hinges (rotcopy (scad:translate 
-							 (- *center-to-edge-ext*) 0 0 
-							 (hinge))))
-		   (hinge-slots (rotcopy (scad:translate 
+	(let* ((hinge-slots (rotcopy (scad:translate 
 								  (- *center-to-edge-ext*) 0 0 
-								  (scad:scale 1.15 1.1 2 (hinge)))))
+								  (scad:scale 1.1 1.1 2 (hinge '())))))
 		   (hinge-pins (rotcopy (scad:translate 
-								 (- *center-to-edge-ext*) 0 0 
-								 (hinge-pin))))
-		   (hinge-pin-holes 
-			 (rotcopy (scad:translate 
-					   (- *center-to-edge-ext*) 0 0
-					   (scad:scale 1.1 1.1 1.1 (hinge-pin))))))
-	  (scad:scad-union 
+								 (- *center-to-edge*) 0 0 
+								 (hinge-pin)))))
+	  (scad:scad-union
 	   hinge-pins
 	   (scad:difference
-	   	hinges
-	   	hinge-pin-holes)
-	   (scad:difference
 		(triangle)
-		hinge-slots
-		hinge-pin-holes))
-	  )))
+		hinge-slots)))))
 
 (scad:emit
-;  (scad:scad-union
-;   (hinge-pin)
-;   (hinge))
  (scad:scad-union
-  (hinged-triangle '(0 1))
-  (scad:translate *triangle-center-distance* 0 0
-  				  (scad:rotate 0 0 180 (hinged-triangle '(0 1)))))
+  (scad:translate 0 20 0 (hinged-triangle '(0)))
+  (scad:translate 0 0 0 (hinge 't)))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
