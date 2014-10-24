@@ -1,6 +1,6 @@
 (load "~/software/blueprints/3D/openscad/opensexp.lisp")
 
-(defparameter *side-length* 50)
+(defparameter *side-length* 25)
 (defparameter *thickness* 5)
 (defparameter *hinge-width* (/ *side-length* 3))
 (defparameter *hinge-embed* *thickness*)
@@ -62,10 +62,16 @@
 			 corner-locs))))
 
 (defun hinged-triangle (sides)
-  ;; would like to apply these things just once, but the
-  ;; scaling-for-clearance has to happen before the translation. again
-  ;; arguing for a datastructure that has both the string AND the real
-  ;; coordinates
+  ;; the scaling-for-clearance has to happen before the translation,
+  ;; but that would mean the defun only knows about the *shape* not
+  ;; the *position*, which is fine in some cases but not in others
+  ;; where the positioning (like for the pins) is *part* of the
+  ;; shape. again arguing for a datastructure that has both the string
+  ;; AND the real coordinates.
+  ;;
+  ;; in this case, the point of the scaling is just to make a hole big
+  ;; enough to allow the pin to rotate, which seems to be true even if
+  ;; the centering is off.
   (flet ((rotcopy (x) (scad:scad-union 
 					   (loop for i in sides collecting
 							(scad:rotate 0 0 (* i 120)
@@ -75,18 +81,14 @@
 							 (hinge))))
 		   (hinge-slots (rotcopy (scad:translate 
 								  (- *center-to-edge-ext*) 0 0 
-								  (scad:scale 1.1 1.1 2 (hinge)))))
+								  (scad:scale 1.15 1.1 2 (hinge)))))
 		   (hinge-pins (rotcopy (scad:translate 
 								 (- *center-to-edge-ext*) 0 0 
 								 (hinge-pin))))
 		   (hinge-pin-holes 
-			(scad:scad-union
 			 (rotcopy (scad:translate 
 					   (- *center-to-edge-ext*) 0 0
-					   (scad:scale 1.1 1.1 1.1 (hinge-pin))))
-			 (rotcopy (scad:translate 
-					   (- (+ *center-to-edge-ext* *hinge-embed*)) 0 0 
-					   (scad:scale 1.1 1.1 1.1 (hinge-pin)))))))
+					   (scad:scale 1.1 1.1 1.1 (hinge-pin))))))
 	  (scad:scad-union 
 	   hinge-pins
 	   (scad:difference
@@ -103,9 +105,9 @@
 ;   (hinge-pin)
 ;   (hinge))
  (scad:scad-union
-  (hinged-triangle '(0))
+  (hinged-triangle '(0 1))
   (scad:translate *triangle-center-distance* 0 0
-  				  (scad:rotate 0 0 180 (hinged-triangle '(0)))))
+  				  (scad:rotate 0 0 180 (hinged-triangle '(0 1)))))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
