@@ -9,21 +9,38 @@
 (defparameter *center-to-corner-ext* (+ (/ *thickness* 2) *center-to-corner*))
 (defparameter *center-to-edge-ext* (+ (/ *thickness* 2) *center-to-edge*))
 (defparameter *hinge-pin-radius* (/ *thickness* 4))
-(defparameter *hinge-pin-length* (* *hinge-width* 2))
+(defparameter *hinge-pin-length* (/ *hinge-width* 8))
 (defparameter *triangle-center-distance* (* -2 *center-to-edge-ext*))
 
 (defun hinge-pin ()
-  (scad:rotate 90 0 0 (scad:cylinder *hinge-pin-radius* *hinge-pin-length*)))
+  (scad:rotate
+   90 0 0
+   (scad:translate 
+	(- *hinge-embed* (/ *thickness* 2)) 
+	0 
+	(/ *hinge-width* 2) 
+	(scad:cylinder *hinge-pin-radius* *hinge-pin-length* :r2 0))
+   (scad:translate 
+	(- *hinge-embed* (/ *thickness* 2)) 
+	0 
+	(- (/ *hinge-width* -2) *hinge-pin-length*)
+	(scad:cylinder 0 *hinge-pin-length* :r2 *hinge-pin-radius*))))
 
 (defun hinge ()
-  (scad:rotate 90 0 0
-			   (scad:hull
-				(scad:translate (* -1 *hinge-embed*) 0 (/ *hinge-width* -2)
-								(scad:cylinder (/ *thickness* 2) *hinge-width*))
-				(scad:translate *hinge-embed* 0 (/ *hinge-width* -2)
-								(scad:cylinder (/ *thickness* 2) *hinge-width*)))))
+  (scad:rotate 
+   90 0 0
+	(scad:hull
+	 (scad:translate 
+	  (- (- *hinge-embed* (/ *thickness* 2))) 
+	  0 
+	  (/ *hinge-width* -2)
+	  (scad:cylinder (/ *thickness* 2) *hinge-width*))
+	 (scad:translate 
+	  (- *hinge-embed* (/ *thickness* 2)) 
+	  0 
+	  (/ *hinge-width* -2)
+	  (scad:cylinder (/ *thickness* 2) *hinge-width*)))))
 
-; this would be a lot simpler as a minkowski hull...
 (defun triangle ()
 ; since I'm making my triangle by "radiating from the center" one
 ; unit, I need to scale by something to get the right side length
@@ -84,9 +101,12 @@
 
 (scad:emit
  (scad:scad-union
-  (hinged-triangle '(0))
-  (scad:translate *triangle-center-distance* 0 0
-  				  (scad:rotate 0 0 180 (hinged-triangle '(0)))))
+  (hinge-pin)
+  (hinge))
+ ;; (scad:scad-union
+ ;;  (hinged-triangle '(0))
+ ;;  (scad:translate *triangle-center-distance* 0 0
+ ;;  				  (scad:rotate 0 0 180 (hinged-triangle '(0)))))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
 
