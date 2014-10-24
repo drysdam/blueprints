@@ -46,9 +46,9 @@
 (defun circle (radius)
   (format nil "circle(r=~,6f);" radius))
 
-(defun cylinder (radius height &key (center '()))
-  (format nil "cylinder(r=~,6f,h=~,6f, center=~:[false~;true~]);" 
-		  radius height center))
+(defun cylinder (radius height &key (r2 radius) (center '()))
+  (format nil "cylinder(r1=~,6f,r2=~,6f,h=~,6f, center=~:[false~;true~]);" 
+		  radius r2 height center))
 
 (defun cube (x y z &key (center '()))
   (format nil "cube([~,6f,~,6f,~,6f], center=~:[false~;true~]);" x y z center))
@@ -154,12 +154,16 @@
 	  l))
 
 ;; ; test cases
-(emit
- (polyhedron '((0 0 0) (10 10 10) (10 -10 10)) '((0 1 2)))
- :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad")
+;; (emit
+;;  (polyhedron '((0 0 0) (10 10 10) (10 -10 10)) '((0 1 2)))
+;;  :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad")
 
 ;; (emit 
 ;;  (rotate 45 0 0 (cube 10 10 10))
+;;  :file "/tmp/blah")
+
+;; (emit 
+;;  (cylinder 10 10)
 ;;  :file "/tmp/blah")
 
 ;; (emit
@@ -223,6 +227,6 @@
 ;;  :file "/home/dr/software/blueprints/3D/openscad/sierpinski.scad"
 ;;  :includes '("coordinates.scad"))
 
-(emit 
- (scad:mill '((0 0 0) (10 10 0) (10 20 0) (0 0 0)) (scad:sphere 3))
- :file "/tmp/blah")
+;; (emit 
+;;  (scad:mill '((0 0 0) (10 10 0) (10 20 0) (0 0 0)) (scad:sphere 3))
+;;  :file "/tmp/blah")
