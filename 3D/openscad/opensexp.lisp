@@ -17,6 +17,7 @@
 (defpackage :scad
   (:use :common-lisp)
   (:export 
+   :in->mm
    :cosd
    :sind
    :line-xyz
@@ -139,6 +140,9 @@
 		  pointlist (cdr pointlist)))
 
 ; machinery/helpers
+
+(defun in->mm (inches)
+  (* inches 25.4))
 
 (defun cosd (degrees)
   (cos (* degrees (/ pi 180))))
