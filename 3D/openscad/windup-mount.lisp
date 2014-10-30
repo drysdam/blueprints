@@ -1,6 +1,6 @@
 (load "~/software/blueprints/3D/openscad/opensexp.lisp")
 
-(defun windup-mount ()
+(defun windup ()
   (scad:scad-union
    (scad:cube 
 	(scad:in->mm 1.005) (scad:in->mm .316) (scad:in->mm .554) :center 't)
@@ -20,11 +20,27 @@
 	 90 0 0 
 	 (scad:cylinder 
 	  (scad:in->mm (/ .060 2)) (scad:in->mm .885))))
+   (scad:translate 
+	(scad:in->mm (- (- (/ 1.005 2) (+ .253 (/ .060 2)))))
+	(scad:in->mm (- .390))
+	0
+	(scad:rotate 
+	 90 0 0 
+	 (scad:cylinder 
+	  (scad:in->mm (/ .185 2)) (scad:in->mm .315))))
+   (scad:translate 
+	(scad:in->mm (- (- (/ 1.005 2) (+ .253 (/ .060 2)))))
+	(scad:in->mm (- .460))
+	0
+	(scad:rotate 
+	 90 0 0 
+	 (scad:cylinder 
+	  (scad:in->mm (/ .220 2)) (scad:in->mm .245))))
    )
   )
 
 (scad:emit
- (windup-mount)
+ (windup)
  :file "/home/dr/software/blueprints/3D/openscad/windup-mount.scad"
  :fn 20)
 
