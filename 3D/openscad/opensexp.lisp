@@ -6,7 +6,14 @@
 ; - radius/diameter option somehow (macro? keyword?)
 ;
 ; - move some helpers, like (cosd) and (sind) into a more general
-; - location for ALL lisp program, not just opensexp ones
+;   location for ALL lisp program, not just opensexp ones
+;
+; - placement/alignment helpers. for instance, I don't care how I have
+;   to move--I want this center to be the same as *that* center. make
+;   it so. another example: given two points and two radii, construct
+;   my item at the intersection of those two circles. that way *I*
+;   don't have to do the math
+
 ;; to enable "live-coding:, do this, but with only two ;s, at the end
 ;; of the file:
 ;;;;;;;; Local Variables:
