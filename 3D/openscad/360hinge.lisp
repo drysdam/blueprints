@@ -1,7 +1,7 @@
 (load "~/software/blueprints/3D/openscad/opensexp.lisp")
 
-(defparameter *side-length* 25)
-(defparameter *thickness* 5)
+(defparameter *side-length* 35)
+(defparameter *thickness* 8)
 (defparameter *hinge-width* (/ *side-length* 3))
 (defparameter *hinge-embed* *thickness*)
 (defparameter *center-to-corner* (* *side-length* (/ (sqrt 3) 3)))
@@ -37,18 +37,18 @@
 		  basic-hinge
 		  (scad:translate 
 		   (- *hinge-embed* (/ *thickness* 2)) 0 0 
-		   (scad:scale 1.1 1.1 1.1 (hinge-pin)))
+		   (scad:scale 1.15 1.15 1.15 (hinge-pin)))
 		  (scad:translate 
 		   (- (- *hinge-embed* (/ *thickness* 2))) 0 0 
-		   (scad:scale 1.1 1.1 1.1 (hinge-pin)))
+		   (scad:scale 1.15 1.15 1.15 (hinge-pin)))
 		  (scad:translate 
 		   *hinge-embed* 0 0
 		   (scad:cube 
-			5 (* 2 *hinge-width*) (* 1.5 *hinge-pin-radius*) :center 't))
+			5 (* 2 *hinge-width*) (* 1.55 *hinge-pin-radius*) :center 't))
 		  (scad:translate 
 		   (- *hinge-embed*) 0 0
 		   (scad:cube 
-			5 (* 2 *hinge-width*) (* 1.5 *hinge-pin-radius*) :center 't)))
+			5 (* 2 *hinge-width*) (* 1.55 *hinge-pin-radius*) :center 't)))
 		basic-hinge)))
 
 (defun triangle ()
@@ -101,7 +101,7 @@
 
 (scad:emit
  (scad:scad-union
-  (scad:translate 0 20 0 (hinged-triangle '(0)))
+  (scad:translate 25 25 0 (hinged-triangle '(0)))
   (scad:translate 0 0 0 (hinge 't)))
  :file "/home/dr/software/blueprints/3D/openscad/360hinge.scad"
  :fn 20)
