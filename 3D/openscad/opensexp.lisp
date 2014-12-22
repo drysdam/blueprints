@@ -88,9 +88,13 @@
 (defun hull (&rest scad)
   (format nil "hull () {~a};" (merge-scad scad)))
 
-(defun polygon (pointlist edgelist)
+(defun polygon (pointlist)
   (format nil "polygon([~{[~{~,6f~^,~}]~^,~}], [[~{~a~^,~}]]);" 
-  		  pointlist edgelist))
+  		  pointlist (append 
+					 (loop for i from 0 to (1- (length pointlist))
+						collecting i)
+					 '(0))))
+  
 
 (defun polyhedron (pointlist facelistlist)
   (format nil "polyhedron([~{[~{~,6f~^,~}]~^,~}], [~{[~{~a~^,~}]~^,~}]);" 
@@ -119,8 +123,7 @@
 	 (append '((0 0))
 			 (loop for a from from-angle upto real-to-angle collect
 				  (list (* radius (cosd a)) (* radius (sind a))))
-			 '((0 0)))
-	(loop for p upto (+ (- real-to-angle from-angle) 2) collect p))))
+			 '((0 0))))))
 	
 (defun line-xyz (xyz1 xyz2 &optional (cutter "sphere(3)"))
   (format nil "hull() {
@@ -163,6 +166,15 @@
 	   (lambda (a b) (concatenate 'string a b))
 	   (mapcar #'merge-scad l))
 	  l))
+
+; internal
+
+(defun pairwise (f lst)
+  (let ((lst1 lst)
+		(lst2 (append (cdr lst) (list (car lst)))))
+	(mapcar (lambda (p1 p2)
+			  (funcall f p1 p2))
+			lst1 lst2)))
 
 ;; ; test cases
 ;; (emit
