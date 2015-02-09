@@ -1,6 +1,6 @@
 module involute(basediameter) {
 	pi=3.1415926;
-	for(thetadeg=[0:1:40]) {
+	for(thetadeg=[0:1:89]) {
 		assign(thetadeg2=thetadeg+1, thetarad=thetadeg*pi/180.0, thetarad2=(thetadeg+1)*pi/180.0) {
 			polygon(points=[[0,0], 
 					[-basediameter/2*(thetarad*sin(thetadeg)+cos(thetadeg)), 
@@ -61,10 +61,26 @@ union() {
 		for(toothrot=[0:360/N:360]) {
 			rotate([0,0,toothrot]) {
 				linear_extrude(height=4) {
-					rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
-					involute(basediameter);
+					intersection() {
+						rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
+						involute(basediameter);
+					}
 				}
 			}
 		}
 	}
 }
+// intersection() {
+// 	linear_extrude(height=4) {
+// 		rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
+// 	}
+// 	linear_extrude(height=4) {
+// 		involute(basediameter);
+// 	}
+// }
+// linear_extrude(height=4) {
+// 	intersection() {
+// 		rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
+// 		involute(basediameter);
+// 	}
+// }
