@@ -27,10 +27,6 @@ PA=20;
 // ---------------------------------------------------
 // diametral pitch
 DP=20;
-// addendum (amount of tooth above the PCD, so PCD+2*addendum = gear
-// blank size)
-addendum=1/DP;
-dedendum=1.25/DP;
 // ---------------------------------------------------
 
 
@@ -45,42 +41,41 @@ PCD=1;
 
 // combinations of the above and converted to imperial units rather than numbers
 // ---------------------------------------------------
-// base circle calculation
+// addendum (amount of tooth above the PCD, so PCD+2*addendum = gear
+// blank size)
+addendum=1/DP;
+dedendum=1.25/DP;
+// number of gear teeth
 N=DP*PCD;
+// base circle calculation
 basediameter=PCD*cos(PA)*25.4;
 blankdiameter = (PCD + 2*addendum)*25.4;
 rootdiameter = (PCD - 2*dedendum)*25.4;
 // ---------------------------------------------------
 
-union() {
-	// dedendum circle
-	cylinder(r=rootdiameter/2,h=5);
-	intersection() {
-		// addendum circle
-		cylinder(r=blankdiameter/2,h=5);
-		for(toothrot=[0:360/N:360]) {
-			rotate([0,0,toothrot]) {
-				linear_extrude(height=4) {
-					intersection() {
-						rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
-						involute(basediameter);
-					}
-				}
-			}
-		}
-	}
-}
-// intersection() {
-// 	linear_extrude(height=4) {
-// 		rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
-// 	}
-// 	linear_extrude(height=4) {
-// 		involute(basediameter);
-// 	}
-// }
-// linear_extrude(height=4) {
+// union() {
+// 	// dedendum circle
+// 	cylinder(r=rootdiameter/2,h=5);
 // 	intersection() {
-// 		rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
-// 		involute(basediameter);
+// 		// addendum circle
+// 		cylinder(r=blankdiameter/2,h=5);
+// 		for(toothrot=[0:360/N:360]) {
+// 			rotate([0,0,toothrot]) {
+// 				linear_extrude(height=4) {
+// 					intersection() {
+// 						rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
+// 						involute(basediameter);
+// 					}
+// 				}
+// 			}
+// 		}
 // 	}
 // }
+cylinder(r=(PCD*25.4)/2, h=1);
+rot = 0;
+linear_extrude(height=4) {
+	// intersection() {
+	// 	rotate([0,0,-rot]) mirror([0,1,0]) involute(basediameter);
+		rotate([0,0,rot]) involute(basediameter);
+//	}
+}
