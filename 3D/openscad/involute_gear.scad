@@ -17,7 +17,7 @@ module involute(basediameter) {
 	// 	],
 	// 	paths=[[0,1,2]]);
 	pi=3.1415926;
-	for(thetadeg=[0:1:89]) {
+	for(thetadeg=[0:1:40]) {
 		assign(thetadeg2=thetadeg+1, thetarad=thetadeg*pi/180.0, thetarad2=(thetadeg+1)*pi/180.0) {
 			polygon(points=[[0,0], 
 					[-basediameter*(thetarad*sin(thetadeg)+cos(thetadeg)), 
@@ -55,7 +55,7 @@ dedendum=1.25/DP;
 // individual gears independent data
 // ---------------------------------------------------
 // pitch circle diameter
-PCD=3;
+PCD=1;
 // ---------------------------------------------------
 
 
@@ -70,12 +70,34 @@ rootdiameter = (PCD - 2*dedendum)*25.4;
 // ---------------------------------------------------
 
 
-cylinder(r=rootdiameter, h=10);
-cylinder(r=blankdiameter, h=5);
-color("red") {
-	translate([0,0,5]) {
-		linear_extrude(height=4) {
-			involute(basediameter);
-		}
+// cylinder(r=rootdiameter, h=10);
+// cylinder(r=blankdiameter, h=5);
+// color("red") {
+// 	translate([0,0,5]) {
+// 		for(toothrot=[0:360/N:360]) {
+// 			rotate([0,0,toothrot]) {
+// 				linear_extrude(height=4) {
+// 					involute(basediameter);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+// color("blue") {
+// 	translate([0,0,5]) {
+// 		for(toothrot=[0:360/N:360]) {
+// 			rotate([0,0,toothrot-360/(2*N)]) {
+// 				linear_extrude(height=4) {
+// 					mirror([0,1,0]) involute(basediameter);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+intersection() {
+	cylinder(r=blankdiameter,h=5);
+	linear_extrude(height=4) {
+		rotate([0,0,-360/40]) mirror([0,1,0]) involute(basediameter);
+		involute(basediameter);
 	}
 }
