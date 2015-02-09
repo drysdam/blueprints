@@ -53,29 +53,35 @@ blankdiameter = (PCD + 2*addendum)*25.4;
 rootdiameter = (PCD - 2*dedendum)*25.4;
 // ---------------------------------------------------
 
-// union() {
-// 	// dedendum circle
-// 	cylinder(r=rootdiameter/2,h=5);
+pitchrot = .86;
+halftoothsize = 360/(4*N);
+union() {
+	// dedendum circle
+	cylinder(r=rootdiameter/2,h=5);
+	intersection() {
+		// addendum circle
+		cylinder(r=blankdiameter/2,h=5);
+		for(toothrot=[0:360/N:360]) {
+			rotate([0,0,toothrot]) {
+				linear_extrude(height=4) {
+					intersection() {
+						rotate([0,0,-pitchrot-halftoothsize]) mirror([0,1,0]) involute(basediameter);
+						rotate([0,0,pitchrot+halftoothsize]) involute(basediameter);
+					}
+				}
+			}
+		}
+	}
+}
+// color("white") cylinder(r=blankdiameter/2, h=1);
+// color("yellow") cylinder(r=(PCD*25.4)/2, h=2);
+// cylinder(r=basediameter/2, h=3);
+// color("black") cylinder(r=rootdiameter/2, h=4);
+// pitchrot = .86;
+// toothsize = 360/(4*N);
+// color("red") linear_extrude(height=5) {
 // 	intersection() {
-// 		// addendum circle
-// 		cylinder(r=blankdiameter/2,h=5);
-// 		for(toothrot=[0:360/N:360]) {
-// 			rotate([0,0,toothrot]) {
-// 				linear_extrude(height=4) {
-// 					intersection() {
-// 						rotate([0,0,-360/(2*N)]) mirror([0,1,0]) involute(basediameter);
-// 						involute(basediameter);
-// 					}
-// 				}
-// 			}
-// 		}
+// 		rotate([0,0,-pitchrot-toothsize]) mirror([0,1,0]) involute(basediameter);
+// 		rotate([0,0,pitchrot+toothsize]) involute(basediameter);
 // 	}
 // }
-cylinder(r=(PCD*25.4)/2, h=1);
-rot = 0;
-linear_extrude(height=4) {
-	// intersection() {
-	// 	rotate([0,0,-rot]) mirror([0,1,0]) involute(basediameter);
-		rotate([0,0,rot]) involute(basediameter);
-//	}
-}
