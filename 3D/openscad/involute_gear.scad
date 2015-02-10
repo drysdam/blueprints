@@ -68,6 +68,35 @@ module gear(PCD, DP=20, PA=20) {
 	// }
 }
 
+// all racks have an infinite PCD, so the only variables are DP and
+// PA. that said, I would like a length variable so let's make it the
+// number of teeth.
+module rack(N, DP=20, PA=20) {
+	pi=3.1415926;
+	CP = pi/DP * 25.4;
+	drawingdepth = CP/(2*tan(PA));
+	pitchline = drawingdepth/2;
+	addendum=1/DP * 25.4;
+	dedendum=1.25/DP * 25.4;
+	addendumline = (pitchline + addendum);
+	dedendumline = (pitchline - dedendum);
+
+	difference() {
+		linear_extrude(height=7) {
+			polygon(points=[[0*CP,0], [0.5*CP,drawingdepth], 
+					[1*CP,0], [1.5*CP,drawingdepth], 
+					[2*CP,0], [2.5*CP,drawingdepth], 
+					[3*CP,0], [3.5*CP,drawingdepth], 
+					[4*CP,0], [4.5*CP,drawingdepth], 
+					[5*CP,0], [5.5*CP,drawingdepth], 
+					[6*CP,0]], 
+				paths=[[0,1,2,3,4,5,6,7,8,9,10,11,12]]);
+		}
+		translate([0, addendumline, -1]) cube([30,10,10]);
+	}
+	translate([0,-3+dedendumline, -1]) cube([6*CP,3,9]);
+}
+
 $fn=100;
 
 // difference() {
@@ -80,3 +109,6 @@ $fn=100;
 // 	translate([.375,.375,0]) cylinder(r=.120, h=.500);
 // 	translate([1.375,.375,0]) cylinder(r=.120, h=.500);
 // }
+
+//gear(2);
+rack();
