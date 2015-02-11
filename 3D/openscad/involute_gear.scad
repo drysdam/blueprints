@@ -82,27 +82,23 @@ module rack(N, DP=20, PA=20) {
 	dedendumline = (pitchline - dedendum);
 
 	difference() {
-		linear_extrude(height=7) {
-			polygon(points=[[0*CP,0], [0.5*CP,drawingdepth], 
-					[1*CP,0], [1.5*CP,drawingdepth], 
-					[2*CP,0], [2.5*CP,drawingdepth], 
-					[3*CP,0], [3.5*CP,drawingdepth], 
-					[4*CP,0], [4.5*CP,drawingdepth], 
-					[5*CP,0], [5.5*CP,drawingdepth], 
-					[6*CP,0]], 
-				paths=[[0,1,2,3,4,5,6,7,8,9,10,11,12]]);
+        for(toothnum=[0:1:N-1]) {
+			linear_extrude(height=7) {
+				polygon(points=[[(toothnum)*CP,0], [(toothnum+.5)*CP,drawingdepth], [(toothnum+1)*CP,0]],
+					paths=[[0,1,2]]);
+			}
 		}
-		translate([0, addendumline, -1]) cube([30,10,10]);
+		translate([0, addendumline, -1]) cube([N*CP,3,9]);
 	}
-	translate([0,-3+dedendumline, -1]) cube([6*CP,3,9]);
+	translate([0,-3+dedendumline, 0]) cube([N*CP,3,7]);
 }
 
 $fn=100;
 
-// difference() {
-// 	gear(1, 20, 20);
-// 	translate([0,0,-1]) cylinder(r=.125*25.4, h=10);
-// }
+difference() {
+	gear(1, 32, 20);
+	translate([0,0,-1]) cylinder(r=.125*25.4, h=10);
+}
 
 // scale(25.4) {
 // 	cube([1.75,.75,.125]);
@@ -110,5 +106,6 @@ $fn=100;
 // 	translate([1.375,.375,0]) cylinder(r=.120, h=.500);
 // }
 
-//gear(2);
-rack();
+//gear(1);
+//translate([50,0,0]) gear(1,48);
+//rack(20,48);
