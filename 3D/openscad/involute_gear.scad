@@ -16,16 +16,16 @@ module involute(basediameter) {
 // unless I'm doing something crazy, PA is 20.
 // I might do DP as something else, but for a whole bunch of
 // individual gears
-// PCD will vary by gear.
-module gear(PCD, DP=20, PA=20) {
+// N will vary by gear.
+module gear(N, DP=20, PA=20) {
 	// combinations of the above and converted to imperial units rather than numbers
 	// ---------------------------------------------------
 	// addendum (amount of tooth above the PCD, so PCD+2*addendum = gear
 	// blank size)
 	addendum=1/DP;
 	dedendum=1.25/DP;
-	// number of gear teeth
-	N=DP*PCD;
+	// pitch circle diameter
+	PCD = N/DP;
 	// base circle calculation
 	basediameter=PCD*cos(PA)*25.4;
 	blankdiameter = (PCD + 2*addendum)*25.4;
@@ -95,17 +95,23 @@ module rack(N, DP=20, PA=20) {
 
 $fn=100;
 
-difference() {
-	gear(1, 32, 20);
-	translate([0,0,-1]) cylinder(r=.125*25.4, h=10);
-}
+// N, DP, PA
+gear(22, 32, 14.5);
 
-// scale(25.4) {
-// 	cube([1.75,.75,.125]);
-// 	translate([.375,.375,0]) cylinder(r=.120, h=.500);
-// 	translate([1.375,.375,0]) cylinder(r=.120, h=.500);
+// with hole for shaft
+// difference() {
+// 	// for an N-tooth gear of a given pitch, back-calc the PD
+// 	gear(22/32, 32, 14.5);
+// 	translate([0,0,-1]) cylinder(r=3/32*25.4, h=10);
 // }
 
-//gear(1);
+// shafts
+// scale(25.4) {
+// 	cube([2,1,.125]);
+// 	translate([22/32,.5,0]) cylinder(r=3/32-.005, h=.500);
+// 	translate([2-22/32,.5,0]) cylinder(r=3/32-.005, h=.500);
+// }
+
+//gear(2.25, 18, 14.5);
 //translate([50,0,0]) gear(1,48);
 //rack(20,48);
